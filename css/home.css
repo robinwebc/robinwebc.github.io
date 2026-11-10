@@ -108,6 +108,16 @@ a:hover { color: var(--terra); }
 
 html[data-lang="bn"] .place { letter-spacing: 0.04em; text-transform: none; font-size: 0.95rem; }
 
+.avatar {
+  width: 6.75rem;
+  height: 6.75rem;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 20%;
+  border: 3px solid rgba(246, 239, 228, 0.88);
+  display: block;
+}
+
 .mast h1 {
   margin: 0;
   font-weight: 560;

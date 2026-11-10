@@ -27,6 +27,11 @@
       if (value && el.tagName === "META") el.setAttribute("content", value);
     });
 
+    document.querySelectorAll("[data-alt-bn]").forEach(function (el) {
+      var value = el.getAttribute(lang === "en" ? "data-alt-en" : "data-alt-bn");
+      if (value) el.setAttribute("alt", value);
+    });
+
     var locale = document.querySelector('meta[property="og:locale"]');
     if (locale) locale.setAttribute("content", lang === "en" ? "en_US" : "bn_BD");
   }
