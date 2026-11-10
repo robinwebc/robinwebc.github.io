@@ -6,7 +6,7 @@
   <title>ডাকব্যাংক — টেস্ট মোড</title>
   <meta name="description" content="ডাকব্যাংক একটি টেস্ট-মোড অ্যান্ড্রয়েড অ্যাপ। আসল টাকা নয়। বাংলাদেশে প্রকৃত অর্থ লেনদেনে বাংলাদেশ ব্যাংকের লাইসেন্স লাগে।" data-desc-bn="ডাকব্যাংক একটি টেস্ট-মোড অ্যান্ড্রয়েড অ্যাপ। আসল টাকা নয়। বাংলাদেশে প্রকৃত অর্থ লেনদেনে বাংলাদেশ ব্যাংকের লাইসেন্স লাগে।" data-desc-en="DaqBank is a test-mode Android app. Not real money. Real money movement in Bangladesh needs a licence from Bangladesh Bank.">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="theme-color" content="#120c16">
+  <meta name="theme-color" content="#003087">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://robinwebc.github.io/daqbank/">
   <meta property="og:type" content="website">
@@ -20,7 +20,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/daqbank.css">
   <script>
     try {
@@ -52,10 +52,20 @@
     <span class="lang-bn" lang="bn">মূল অংশে যান</span>
     <span class="lang-en" lang="en">Skip to content</span>
   </a>
-  <div class="wrap">
-    <header class="top">
+  <p class="test-banner">
+    <strong>
+      <span class="lang-bn" lang="bn">টেস্ট মোড</span>
+      <span class="lang-en" lang="en">Test mode</span>
+    </strong>
+    <span>
+      <span class="lang-bn" lang="bn">আসল টাকা নয়। বাংলাদেশে প্রকৃত অর্থ লেনদেনে বাংলাদেশ ব্যাংকের লাইসেন্স লাগে।</span>
+      <span class="lang-en" lang="en">Not real money. Real money movement in Bangladesh needs a licence from Bangladesh Bank.</span>
+    </span>
+  </p>
+  <header class="top">
+    <div class="bar">
       <a class="brand" href="./">
-        <span class="mark" aria-hidden="true"></span>
+        <img class="logo" src="favicon.svg" width="40" height="40" alt="">
         <span class="lang-bn" lang="bn">ডাকব্যাংক</span>
         <span class="lang-en" lang="en">DaqBank</span>
       </a>
@@ -73,43 +83,67 @@
           <button type="button" data-lang-set="en" lang="en" aria-pressed="false">English</button>
         </div>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <p class="test-banner">
-      <strong>
-        <span class="lang-bn" lang="bn">টেস্ট মোড</span>
-        <span class="lang-en" lang="en">Test mode</span>
-      </strong>
-      <span>
-        <span class="lang-bn" lang="bn">আসল টাকা নয়। বাংলাদেশে প্রকৃত অর্থ লেনদেনে বাংলাদেশ ব্যাংকের লাইসেন্স লাগে।</span>
-        <span class="lang-en" lang="en">Not real money. Real money movement in Bangladesh needs a licence from Bangladesh Bank.</span>
-      </span>
-    </p>
-
+  <div class="wrap">
     <main id="content">
       <section class="hero" aria-labelledby="daq-title">
-        <p class="stamp">TEST MODE</p>
-        <h1 id="daq-title">
-          <span class="lang-bn" lang="bn">ডাকব্যাংক</span>
-          <span class="lang-en" lang="en">DaqBank</span>
-        </h1>
-        <p class="lead">
-          <span class="lang-bn" lang="bn">পাঠানোর আগে কাকে দিচ্ছেন, সেটা দেখে নিন। ডাকব্যাংক সেন্ড ও রিসিভ রাখে যাচাইয়ের পেছনে: একটি নিজস্ব অ্যাকাউন্ট নম্বর, আর এমন খাতা যাতে পুরোনো এন্ট্রি বদলালে ধরা পড়ে। এখন এটি টেস্ট মোডে। টেস্ট ব্যালেন্স আসল টাকা নয়।</span>
-          <span class="lang-en" lang="en">See who you are paying before you send. DaqBank keeps send and receive behind verification, a unique account number, and a ledger that shows if an older entry was changed. It is in test mode. A test balance is not real money.</span>
-        </p>
-        <div class="cta" id="download">
-          <a class="dl" href="https://github.com/robinwebc/robinwebc.github.io/releases/latest/download/DaqBank.apk" target="_blank" rel="noopener noreferrer" aria-describedby="dl-note dl-test">
-            <span class="lang-bn" lang="bn">APK ডাউনলোড</span>
-            <span class="lang-en" lang="en">Download APK</span>
-          </a>
-          <p class="note" id="dl-note">
-            <span class="lang-bn" lang="bn">APK পরে সর্বশেষ GitHub রিলিজে এই ঠিকানায় দেওয়া হবে। ডাউনলোড এখন না পেলে, শিগগির আসছে।</span>
-            <span class="lang-en" lang="en">The APK will be published on the latest GitHub release at this address. If the download is not available yet, it is coming soon.</span>
+        <div>
+          <p class="kicker">
+            <span class="lang-bn" lang="bn">ডাকব্যাংক · টেস্ট মোড</span>
+            <span class="lang-en" lang="en">DaqBank · Test mode</span>
           </p>
-          <p class="near" id="dl-test">
-            <span class="lang-bn" lang="bn">টেস্ট মোড। আসল টাকা রাখার জায়গা নয়।</span>
-            <span class="lang-en" lang="en">Test mode. Not a place to keep real money.</span>
+          <h1 id="daq-title">
+            <span class="lang-bn" lang="bn">পাঠানোর আগে কাকে দিচ্ছেন, দেখে নিন</span>
+            <span class="lang-en" lang="en">See who you are paying before you send</span>
+          </h1>
+          <p class="lead">
+            <span class="lang-bn" lang="bn">ডাকব্যাংক সেন্ড ও রিসিভ রাখে যাচাইয়ের পেছনে: একটি নিজস্ব অ্যাকাউন্ট নম্বর, আর এমন খাতা যাতে পুরোনো এন্ট্রি বদলালে ধরা পড়ে। এখন এটি টেস্ট মোডে। টেস্ট ব্যালেন্স আসল টাকা নয়।</span>
+            <span class="lang-en" lang="en">DaqBank keeps send and receive behind verification, a unique account number, and a ledger that shows if an older entry was changed. It is in test mode. A test balance is not real money.</span>
           </p>
+          <div class="cta" id="download">
+            <a class="dl" href="https://github.com/robinwebc/robinwebc.github.io/releases/latest/download/DaqBank.apk" target="_blank" rel="noopener noreferrer" aria-describedby="dl-note dl-test">
+              <span class="lang-bn" lang="bn">APK ডাউনলোড</span>
+              <span class="lang-en" lang="en">Download APK</span>
+            </a>
+            <p class="note" id="dl-note">
+              <span class="lang-bn" lang="bn">APK পরে সর্বশেষ GitHub রিলিজে এই ঠিকানায় দেওয়া হবে। ডাউনলোড এখন না পেলে, শিগগির আসছে।</span>
+              <span class="lang-en" lang="en">The APK will be published on the latest GitHub release at this address. If the download is not available yet, it is coming soon.</span>
+            </p>
+            <p class="near" id="dl-test">
+              <span class="lang-bn" lang="bn">টেস্ট মোড। আসল টাকা রাখার জায়গা নয়।</span>
+              <span class="lang-en" lang="en">Test mode. Not a place to keep real money.</span>
+            </p>
+          </div>
+        </div>
+        <div class="phone" aria-hidden="true">
+          <div class="screen">
+            <div class="screen-bar">
+              <img src="favicon.svg" width="22" height="22" alt="">
+              <span class="lang-bn" lang="bn">পাঠান</span>
+              <span class="lang-en" lang="en">Send</span>
+            </div>
+            <p class="screen-kicker">
+              <span class="lang-bn" lang="bn">পাঠানোর আগে</span>
+              <span class="lang-en" lang="en">Before you send</span>
+            </p>
+            <div class="who">
+              <span class="who-photo"></span>
+              <div>
+                <strong>
+                  <span class="lang-bn" lang="bn">প্রাপক</span>
+                  <span class="lang-en" lang="en">Receiver</span>
+                </strong>
+                <span>DB-10428</span>
+              </div>
+            </div>
+            <p class="amt">Tk 500</p>
+            <div class="screen-btn">
+              <span class="lang-bn" lang="bn">নিশ্চিত</span>
+              <span class="lang-en" lang="en">Confirm</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -118,72 +152,56 @@
           <span class="lang-bn" lang="bn">অ্যাকাউন্ট</span>
           <span class="lang-en" lang="en">The account</span>
         </h2>
-        <div class="groups">
-          <article class="group">
+        <div class="cards">
+          <article class="card">
             <h3>
-              <span class="lang-bn" lang="bn">ঢোকা ও ফেরত পাওয়া</span>
-              <span class="lang-en" lang="en">Entry and recovery</span>
+              <span class="lang-bn" lang="bn">Google সাইন-ইন</span>
+              <span class="lang-en" lang="en">Google sign-in</span>
             </h3>
-            <ul>
-              <li>
-                <strong>
-                  <span class="lang-bn" lang="bn">Google সাইন-ইন</span>
-                  <span class="lang-en" lang="en">Google sign-in</span>
-                </strong>
-                <p>
-                  <span class="lang-bn" lang="bn">অ্যাকাউন্টে ঢোকা শুরু হয় Google দিয়ে।</span>
-                  <span class="lang-en" lang="en">Getting into the account starts with Google.</span>
-                </p>
-              </li>
-              <li>
-                <strong>
-                  <span class="lang-bn" lang="bn">পাসকি ও ফেস যাচাই</span>
-                  <span class="lang-en" lang="en">Passkey and face verification</span>
-                </strong>
-                <p>
-                  <span class="lang-bn" lang="bn">পাসকি ডিভাইস চেনায়। সংবেদনশীল ধাপের আগে মুখ মিলিয়ে দেখা হয়।</span>
-                  <span class="lang-en" lang="en">A passkey identifies the device. A face check runs before sensitive steps.</span>
-                </p>
-              </li>
-              <li>
-                <strong>
-                  <span class="lang-bn" lang="bn">ফোন যাচাই ও রিকভারি</span>
-                  <span class="lang-en" lang="en">Phone verification and recovery</span>
-                </strong>
-                <p>
-                  <span class="lang-bn" lang="bn">ফোন নম্বর যাচাই হয়। অ্যাকাউন্ট ফেরত পেতে সেই পথই ব্যবহার হয়।</span>
-                  <span class="lang-en" lang="en">The phone number is verified. The same path is used to recover the account.</span>
-                </p>
-              </li>
-            </ul>
+            <p>
+              <span class="lang-bn" lang="bn">অ্যাকাউন্টে ঢোকা শুরু হয় Google দিয়ে।</span>
+              <span class="lang-en" lang="en">Getting into the account starts with Google.</span>
+            </p>
           </article>
-          <article class="group">
+          <article class="card">
             <h3>
-              <span class="lang-bn" lang="bn">নম্বর ও পরিচয়</span>
-              <span class="lang-en" lang="en">Number and identity</span>
+              <span class="lang-bn" lang="bn">পাসকি ও ফেস যাচাই</span>
+              <span class="lang-en" lang="en">Passkey and face verification</span>
             </h3>
-            <ul>
-              <li>
-                <strong>
-                  <span class="lang-bn" lang="bn">নিজস্ব অ্যাকাউন্ট নম্বর</span>
-                  <span class="lang-en" lang="en">Unique account number</span>
-                </strong>
-                <p>
-                  <span class="lang-bn" lang="bn">প্রতিটি অ্যাকাউন্টের আলাদা নম্বর থাকে।</span>
-                  <span class="lang-en" lang="en">Each account has its own number.</span>
-                </p>
-              </li>
-              <li>
-                <strong>
-                  <span class="lang-bn" lang="bn">প্রাইভেট কেওয়াইসি</span>
-                  <span class="lang-en" lang="en">Private KYC</span>
-                </strong>
-                <p>
-                  <span class="lang-bn" lang="bn">পরিচয়পত্র অন্য ব্যবহারকারীকে দেখানো হয় না, তাদের সাথে শেয়ারও করা হয় না, বিক্রিও হয় না।</span>
-                  <span class="lang-en" lang="en">Identity documents are not shown to other users, not shared with them, and not sold.</span>
-                </p>
-              </li>
-            </ul>
+            <p>
+              <span class="lang-bn" lang="bn">পাসকি ডিভাইস চেনায়। সংবেদনশীল ধাপের আগে মুখ মিলিয়ে দেখা হয়।</span>
+              <span class="lang-en" lang="en">A passkey identifies the device. A face check runs before sensitive steps.</span>
+            </p>
+          </article>
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">ফোন যাচাই ও রিকভারি</span>
+              <span class="lang-en" lang="en">Phone verification and recovery</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">ফোন নম্বর যাচাই হয়। অ্যাকাউন্ট ফেরত পেতে সেই পথই ব্যবহার হয়।</span>
+              <span class="lang-en" lang="en">The phone number is verified. The same path is used to recover the account.</span>
+            </p>
+          </article>
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">নিজস্ব অ্যাকাউন্ট নম্বর</span>
+              <span class="lang-en" lang="en">Unique account number</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">প্রতিটি অ্যাকাউন্টের আলাদা নম্বর থাকে।</span>
+              <span class="lang-en" lang="en">Each account has its own number.</span>
+            </p>
+          </article>
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">প্রাইভেট কেওয়াইসি</span>
+              <span class="lang-en" lang="en">Private KYC</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">পরিচয়পত্র অন্য ব্যবহারকারীকে দেখানো হয় না, তাদের সাথে শেয়ারও করা হয় না, বিক্রিও হয় না।</span>
+              <span class="lang-en" lang="en">Identity documents are not shown to other users, not shared with them, and not sold.</span>
+            </p>
           </article>
         </div>
       </section>
@@ -193,54 +211,46 @@
           <span class="lang-bn" lang="bn">পাঠানো ও নেওয়া</span>
           <span class="lang-en" lang="en">Send and receive</span>
         </h2>
-        <div class="groups">
-          <article class="group wide">
+        <div class="cards">
+          <article class="card">
             <h3>
-              <span class="lang-bn" lang="bn">টাকা কোন পথে</span>
-              <span class="lang-en" lang="en">How money moves</span>
+              <span class="lang-bn" lang="bn">সুরক্ষিত সেন্ড ও রিসিভ</span>
+              <span class="lang-en" lang="en">Secure send and receive</span>
             </h3>
-            <ul>
-              <li>
-                <strong>
-                  <span class="lang-bn" lang="bn">সুরক্ষিত সেন্ড ও রিসিভ</span>
-                  <span class="lang-en" lang="en">Secure send and receive</span>
-                </strong>
-                <p>
-                  <span class="lang-bn" lang="bn">ডাকব্যাংক অ্যাকাউন্টের মধ্যে টাকা পাঠানো ও নেওয়া যায়। টেস্ট মোডে এই ব্যালেন্স আসল টাকা নয়।</span>
-                  <span class="lang-en" lang="en">Money can be sent and received between DaqBank accounts. In test mode that balance is not real money.</span>
-                </p>
-              </li>
-              <li>
-                <strong>
-                  <span class="lang-bn" lang="bn">রিসিভ কিউআর</span>
-                  <span class="lang-en" lang="en">Receive QR</span>
-                </strong>
-                <p>
-                  <span class="lang-bn" lang="bn">প্রাপকের কিউআরে তার ছবি ও অ্যাকাউন্ট নম্বর থাকে। পাঠানোর আগে সেন্ডারের পর্দায় সেই ছবি ও নম্বর দেখা যায়, যাতে মিলিয়ে নেওয়া যায় টাকা কার কাছে যাচ্ছে।</span>
-                  <span class="lang-en" lang="en">The receiver’s QR carries their photo and account number. The sender sees that photo and number before sending, so they can check who will receive the money.</span>
-                </p>
-              </li>
-              <li>
-                <strong>
-                  <span class="lang-bn" lang="bn">বিকাশ লিংক (স্যান্ডবক্স)</span>
-                  <span class="lang-en" lang="en">bKash link (sandbox)</span>
-                </strong>
-                <p>
-                  <span class="lang-bn" lang="bn">বিকাশের সাথে যোগ স্যান্ডবক্সে। এটা লাইভ বিকাশ লেনদেন নয়। আসল গ্রাহকের টাকা নড়ে না।</span>
-                  <span class="lang-en" lang="en">The bKash connection uses the sandbox. It is not live bKash money movement. Real customer funds do not move.</span>
-                </p>
-              </li>
-              <li>
-                <strong>
-                  <span class="lang-bn" lang="bn">ব্যাংক রেল, অ্যাডমিনের হাতে</span>
-                  <span class="lang-en" lang="en">Bank rails, controlled by an admin</span>
-                </strong>
-                <p>
-                  <span class="lang-bn" lang="bn">ব্যাংক ট্রান্সফারের পথ একজন অ্যাডমিন চালু বা বন্ধ করেন। ব্যবহারকারী নিজে ব্যাংক রেল খোলেন না।</span>
-                  <span class="lang-en" lang="en">An administrator turns bank transfer paths on or off. Users do not open those rails themselves.</span>
-                </p>
-              </li>
-            </ul>
+            <p>
+              <span class="lang-bn" lang="bn">ডাকব্যাংক অ্যাকাউন্টের মধ্যে টাকা পাঠানো ও নেওয়া যায়। টেস্ট মোডে এই ব্যালেন্স আসল টাকা নয়।</span>
+              <span class="lang-en" lang="en">Money can be sent and received between DaqBank accounts. In test mode that balance is not real money.</span>
+            </p>
+          </article>
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">রিসিভ কিউআর</span>
+              <span class="lang-en" lang="en">Receive QR</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">প্রাপকের কিউআরে তার ছবি ও অ্যাকাউন্ট নম্বর থাকে। পাঠানোর আগে সেন্ডারের পর্দায় সেই ছবি ও নম্বর দেখা যায়, যাতে মিলিয়ে নেওয়া যায় টাকা কার কাছে যাচ্ছে।</span>
+              <span class="lang-en" lang="en">The receiver’s QR carries their photo and account number. The sender sees that photo and number before sending, so they can check who will receive the money.</span>
+            </p>
+          </article>
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">বিকাশ লিংক (স্যান্ডবক্স)</span>
+              <span class="lang-en" lang="en">bKash link (sandbox)</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">বিকাশের সাথে যোগ স্যান্ডবক্সে। এটা লাইভ বিকাশ লেনদেন নয়। আসল গ্রাহকের টাকা নড়ে না।</span>
+              <span class="lang-en" lang="en">The bKash connection uses the sandbox. It is not live bKash money movement. Real customer funds do not move.</span>
+            </p>
+          </article>
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">ব্যাংক রেল, অ্যাডমিনের হাতে</span>
+              <span class="lang-en" lang="en">Bank rails, controlled by an admin</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">ব্যাংক ট্রান্সফারের পথ একজন অ্যাডমিন চালু বা বন্ধ করেন। ব্যবহারকারী নিজে ব্যাংক রেল খোলেন না।</span>
+              <span class="lang-en" lang="en">An administrator turns bank transfer paths on or off. Users do not open those rails themselves.</span>
+            </p>
           </article>
         </div>
         <h2>
@@ -284,40 +294,30 @@
           <span class="lang-bn" lang="bn">খাতা ও তালা</span>
           <span class="lang-en" lang="en">Ledger and lock</span>
         </h2>
-        <div class="groups">
-          <article class="group">
+        <div class="cards">
+          <article class="card">
             <h3>
               <span class="lang-bn" lang="bn">টেম্পার-এভিডেন্ট হ্যাশ-চেইন</span>
               <span class="lang-en" lang="en">Tamper-evident hash chain</span>
             </h3>
-            <ul>
-              <li>
-                <p>
-                  <span class="lang-bn" lang="bn">প্রতিটি এন্ট্রি আগের এন্ট্রির হ্যাশ ধরে রাখে। পুরোনো এন্ট্রি বদলালে চেইন আর মেলে না, তাই বদল ধরা পড়ে। খাতা টেম্পার-এভিডেন্ট: বদল লুকানো কঠিন। এর মানে এই নয় যে আক্রমণ অসম্ভব।</span>
-                  <span class="lang-en" lang="en">Each entry stores a hash tied to the previous entry. Change an older entry and the chain no longer matches, so the change can be seen. The ledger is tamper-evident: a change is hard to hide. That does not mean an attack is impossible.</span>
-                </p>
-              </li>
-            </ul>
+            <p>
+              <span class="lang-bn" lang="bn">প্রতিটি এন্ট্রি আগের এন্ট্রির হ্যাশ ধরে রাখে। পুরোনো এন্ট্রি বদলালে চেইন আর মেলে না, তাই বদল ধরা পড়ে। খাতা টেম্পার-এভিডেন্ট: বদল লুকানো কঠিন। এর মানে এই নয় যে আক্রমণ অসম্ভব।</span>
+              <span class="lang-en" lang="en">Each entry stores a hash tied to the previous entry. Change an older entry and the chain no longer matches, so the change can be seen. The ledger is tamper-evident: a change is hard to hide. That does not mean an attack is impossible.</span>
+            </p>
           </article>
-          <article class="group">
+          <article class="card">
             <h3>
               <span class="lang-bn" lang="bn">২৪ ঘণ্টার সেফটি লক</span>
               <span class="lang-en" lang="en">24-hour safety lock</span>
             </h3>
-            <ul>
-              <li>
-                <p>
-                  <span class="lang-bn" lang="bn">অ্যাকাউন্ট রিকভারির পর, অথবা প্ল্যাটফর্ম নিজে কোনো ট্রান্সফার করলে, ২৪ ঘণ্টা পাঠানো বন্ধ থাকে।</span>
-                  <span class="lang-en" lang="en">After account recovery, or after a transfer carried out by the platform, sending stays locked for 24 hours.</span>
-                </p>
-              </li>
-            </ul>
+            <p>
+              <span class="lang-bn" lang="bn">অ্যাকাউন্ট রিকভারির পর, অথবা প্ল্যাটফর্ম নিজে কোনো ট্রান্সফার করলে, ২৪ ঘণ্টা পাঠানো বন্ধ থাকে।</span>
+              <span class="lang-en" lang="en">After account recovery, or after a transfer carried out by the platform, sending stays locked for 24 hours.</span>
+            </p>
           </article>
         </div>
         <div class="callout">
-          <p>
-            <strong class="stamp">TEST MODE</strong>
-          </p>
+          <p><strong class="stamp">TEST MODE</strong></p>
           <p>
             <span class="lang-bn" lang="bn">ডাকব্যাংক এখন টেস্ট মোডে। এটি লাইসেন্সপ্রাপ্ত ব্যাংক বা পেমেন্ট সার্ভিস নয়। বাংলাদেশে গ্রাহকের আসল টাকা সরাতে বাংলাদেশ ব্যাংকের লাইসেন্স লাগে। টেস্ট ব্যালেন্সকে আসল টাকা হিসেবে নেবেন না।</span>
             <span class="lang-en" lang="en">DaqBank is currently in test mode. It is not a licensed bank or payment service. Moving real customer money in Bangladesh requires a licence from Bangladesh Bank. Do not treat a test balance as real money.</span>
