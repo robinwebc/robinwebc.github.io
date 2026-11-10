@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://robinwebc.github.io/sitemap.xml
