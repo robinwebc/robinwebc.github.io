@@ -2,7 +2,7 @@
   var KEY = "robin-lang";
 
   function apply(lang) {
-    if (lang !== "en" && lang !== "bn") lang = "bn";
+    if (lang !== "en" && lang !== "bn") lang = "en";
     var root = document.documentElement;
     root.setAttribute("data-lang", lang);
     root.lang = lang;
@@ -37,10 +37,15 @@
   }
 
   document.addEventListener("click", function (event) {
+    var toggle = event.target.closest("[data-lang-toggle]");
+    if (toggle) {
+      apply(document.documentElement.getAttribute("data-lang") === "en" ? "bn" : "en");
+      return;
+    }
     var btn = event.target.closest("[data-lang-set]");
     if (!btn) return;
     apply(btn.getAttribute("data-lang-set"));
   });
 
-  apply(document.documentElement.getAttribute("data-lang") === "en" ? "en" : "bn");
+  apply(document.documentElement.getAttribute("data-lang") === "bn" ? "bn" : "en");
 })();

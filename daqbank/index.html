@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="bn" data-lang="bn">
+<html lang="en" data-lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>ডাকব্যাংক — টেস্ট মোড</title>
-  <meta name="description" content="ডাকব্যাংক একটি টেস্ট-মোড অ্যান্ড্রয়েড অ্যাপ। আসল টাকা নয়। বাংলাদেশে প্রকৃত অর্থ লেনদেনে বাংলাদেশ ব্যাংকের লাইসেন্স লাগে।" data-desc-bn="ডাকব্যাংক একটি টেস্ট-মোড অ্যান্ড্রয়েড অ্যাপ। আসল টাকা নয়। বাংলাদেশে প্রকৃত অর্থ লেনদেনে বাংলাদেশ ব্যাংকের লাইসেন্স লাগে।" data-desc-en="DaqBank is a test-mode Android app. Not real money. Real money movement in Bangladesh needs a licence from Bangladesh Bank.">
+  <title>DaqBank — test mode</title>
+  <meta name="description" content="DaqBank is a test-mode Android app. Not real money. Real money movement in Bangladesh needs a licence from Bangladesh Bank." data-desc-bn="ডাকব্যাংক একটি টেস্ট-মোড অ্যান্ড্রয়েড অ্যাপ। আসল টাকা নয়। বাংলাদেশে প্রকৃত অর্থ লেনদেনে বাংলাদেশ ব্যাংকের লাইসেন্স লাগে।" data-desc-en="DaqBank is a test-mode Android app. Not real money. Real money movement in Bangladesh needs a licence from Bangladesh Bank.">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="theme-color" content="#003087">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://robinwebc.github.io/daqbank/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://robinwebc.github.io/daqbank/">
-  <meta property="og:title" content="ডাকব্যাংক — টেস্ট মোড" data-title-bn="ডাকব্যাংক — টেস্ট মোড" data-title-en="DaqBank — test mode">
-  <meta property="og:description" content="ডাকব্যাংক একটি টেস্ট-মোড অ্যান্ড্রয়েড অ্যাপ। আসল টাকা নয়। বাংলাদেশে প্রকৃত অর্থ লেনদেনে বাংলাদেশ ব্যাংকের লাইসেন্স লাগে।" data-desc-bn="ডাকব্যাংক একটি টেস্ট-মোড অ্যান্ড্রয়েড অ্যাপ। আসল টাকা নয়। বাংলাদেশে প্রকৃত অর্থ লেনদেনে বাংলাদেশ ব্যাংকের লাইসেন্স লাগে।" data-desc-en="DaqBank is a test-mode Android app. Not real money. Real money movement in Bangladesh needs a licence from Bangladesh Bank.">
-  <meta property="og:locale" content="bn_BD">
-  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:title" content="DaqBank — test mode" data-title-bn="ডাকব্যাংক — টেস্ট মোড" data-title-en="DaqBank — test mode">
+  <meta property="og:description" content="DaqBank is a test-mode Android app. Not real money. Real money movement in Bangladesh needs a licence from Bangladesh Bank." data-desc-bn="ডাকব্যাংক একটি টেস্ট-মোড অ্যান্ড্রয়েড অ্যাপ। আসল টাকা নয়। বাংলাদেশে প্রকৃত অর্থ লেনদেনে বাংলাদেশ ব্যাংকের লাইসেন্স লাগে।" data-desc-en="DaqBank is a test-mode Android app. Not real money. Real money movement in Bangladesh needs a licence from Bangladesh Bank.">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="bn_BD">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@robinwebc">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -74,13 +74,11 @@
           <span class="lang-bn" lang="bn">রবিন</span>
           <span class="lang-en" lang="en">Robin</span>
         </a>
-        <div class="lang" role="group" aria-labelledby="lang-label">
-          <span id="lang-label" class="visually-hidden">
-            <span class="lang-bn" lang="bn">ভাষা</span>
-            <span class="lang-en" lang="en">Language</span>
-          </span>
-          <button type="button" data-lang-set="bn" lang="bn" aria-pressed="true">বাংলা</button>
-          <button type="button" data-lang-set="en" lang="en" aria-pressed="false">English</button>
+        <div class="lang">
+          <button type="button" data-lang-toggle>
+            <span class="lang-en" lang="bn">বাংলা</span>
+            <span class="lang-bn" lang="en">English</span>
+          </button>
         </div>
       </div>
     </div>

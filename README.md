@@ -6,7 +6,7 @@ GitHub Pages serves this repository from the `main` branch, root folder. There i
 
 | Path | Page |
 | --- | --- |
-| `/` | Robin’s profile, in Bangla by default, with an English toggle |
+| `/` | Robin’s profile, in English by default, with a Bangla toggle |
 | `/daqbank/` | DaqBank, with its own palette and layout |
 | `/daqbank/privacy/` | DaqBank privacy policy |
 
@@ -18,4 +18,4 @@ The Android package is published later at:
 
 Until that file exists, the DaqBank page says the download is coming soon.
 
-Language choice is stored in `localStorage` under `robin-lang` (`bn` or `en`) and follows you between the two parts of the site.
+English is the default. Language choice is stored in `localStorage` under `robin-lang` (`en` or `bn`) and follows you between the two parts of the site. In English, the language button reads বাংলা. The personal page also stores `robin-theme` (`light` or `dark`). The WhatsApp link stays `https://wa.me/` until `WHATSAPP_NUMBER` in `js/home.js` is filled in.
