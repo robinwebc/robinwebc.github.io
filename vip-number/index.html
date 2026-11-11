@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="bn" data-lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ভিআইপি নম্বর খুঁজুন — রবিন</title>
+  <meta name="description" content="রবি (০১৮) ও এয়ারটেল/Cirkle (০১৬) থেকে কেনার মতো খালি মোবাইল নম্বর খুঁজুন। সহজে মনে রাখা যায় এমন নম্বর আগে দেখায়। বিক্রি বা টাকা নেওয়া হয় না।">
+  <meta name="theme-color" content="#fff4ea">
+  <meta name="author" content="Robin">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <link rel="canonical" href="https://robinwebc.github.io/vip-number/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://robinwebc.github.io/vip-number/">
+  <meta property="og:title" content="ভিআইপি নম্বর খুঁজুন — রবিন">
+  <meta property="og:description" content="রবি ও এয়ারটেল/Cirkle-এর খালি নম্বর, সহজে মনে রাখার মতোগুলো আগে। কিনতে অপারেটরের নিজের পাতায় যান।">
+  <meta property="og:locale" content="bn_BD">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/vip.css">
+  <script>
+    try {
+      var saved = localStorage.getItem("robin-lang");
+      if (saved === "en" || saved === "bn") {
+        document.documentElement.setAttribute("data-lang", saved);
+        document.documentElement.lang = saved;
+      }
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#search">
+    <span class="lang-bn" lang="bn">খোঁজে যান</span>
+    <span class="lang-en" lang="en">Skip to search</span>
+  </a>
+  <header class="top">
+    <a class="brand" href="../" aria-label="Robin">R</a>
+    <div class="grow">
+      <h1>
+        <span class="lang-bn" lang="bn">ভিআইপি নম্বর</span>
+        <span class="lang-en" lang="en">VIP numbers</span>
+      </h1>
+      <p>
+        <span class="lang-bn" lang="bn">রবি · এয়ারটেল / Cirkle</span>
+        <span class="lang-en" lang="en">Robi · Airtel / Cirkle</span>
+      </p>
+    </div>
+    <button class="lang" type="button" data-lang-toggle>
+      <span class="lang-en" lang="bn">বাংলা</span>
+      <span class="lang-bn" lang="en">English</span>
+    </button>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>
+        <span class="lang-bn" lang="bn">কেনার জন্য খালি নম্বর</span>
+        <span class="lang-en" lang="en">Numbers you can buy</span>
+      </p>
+      <h2>
+        <span class="lang-bn" lang="bn">মনে রাখা সহজ <span class="grad">নম্বর খুঁজুন</span></span>
+        <span class="lang-en" lang="en">Find a number <span class="grad">worth remembering</span></span>
+      </h2>
+      <p class="lead">
+        <span class="lang-bn" lang="bn">রবি ০১৮ আর এয়ারটেল, যার নতুন নাম Cirkle, ০১৬। অঙ্ক, প্যাটার্ন বা জন্মদিন দিয়ে খুঁজুন। সেরা মিল আগে আসে।</span>
+        <span class="lang-en" lang="en">Robi is 018. Airtel, now Cirkle, is 016. Search by digits, a pattern, or a birthday. The easiest matches come first.</span>
+      </p>
+    </section>
+
+    <form class="panel" id="search">
+      <span class="lbl" id="opLabel">
+        <span class="lang-bn" lang="bn">অপারেটর</span>
+        <span class="lang-en" lang="en">Operator</span>
+      </span>
+      <div class="seg" role="radiogroup" aria-labelledby="opLabel">
+        <button type="button" data-op="both" aria-pressed="true">
+          <span class="lang-bn" lang="bn">দুটোই</span>
+          <span class="lang-en" lang="en">Both</span>
+        </button>
+        <button type="button" class="op-robi" data-op="robi" aria-pressed="false">
+          <span class="lang-bn" lang="bn">রবি · ০১৮</span>
+          <span class="lang-en" lang="en">Robi · 018</span>
+        </button>
+        <button type="button" class="op-airtel" data-op="airtel" aria-pressed="false">
+          <span class="lang-bn" lang="bn">Cirkle · ০১৬</span>
+          <span class="lang-en" lang="en">Cirkle · 016</span>
+        </button>
+      </div>
+
+      <span class="lbl" id="modeLabel">
+        <span class="lang-bn" lang="bn">কীভাবে মিলবে</span>
+        <span class="lang-en" lang="en">How it should match</span>
+      </span>
+      <div class="seg" role="radiogroup" aria-labelledby="modeLabel">
+        <button type="button" data-mode="contains" aria-pressed="true">
+          <span class="lang-bn" lang="bn">আছে</span>
+          <span class="lang-en" lang="en">Contains</span>
+        </button>
+        <button type="button" data-mode="ends" aria-pressed="false">
+          <span class="lang-bn" lang="bn">শেষে</span>
+          <span class="lang-en" lang="en">Ends with</span>
+        </button>
+        <button type="button" data-mode="starts" aria-pressed="false">
+          <span class="lang-bn" lang="bn">শুরুতে</span>
+          <span class="lang-en" lang="en">Starts with</span>
+        </button>
+        <button type="button" data-mode="pattern" aria-pressed="false">
+          <span class="lang-bn" lang="bn">প্যাটার্ন</span>
+          <span class="lang-en" lang="en">Pattern</span>
+        </button>
+      </div>
+
+      <label class="lbl" for="q">
+        <span class="lang-bn" lang="bn">অঙ্ক বা প্যাটার্ন</span>
+        <span class="lang-en" lang="en">Digits or pattern</span>
+      </label>
+      <input class="field" id="q" name="q" inputmode="tel" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="786">
+      <p class="hint" id="hint"></p>
+
+      <label class="lbl" for="birthday">
+        <span class="lang-bn" lang="bn">জন্মদিন, চাইলে (দিনমাস বা দিনমাসসাল)</span>
+        <span class="lang-en" lang="en">Birthday, optional (DDMM or DDMMYYYY)</span>
+      </label>
+      <input class="field" id="birthday" name="birthday" inputmode="numeric" autocomplete="off" placeholder="15081998">
+
+      <span class="lbl" id="filterLabel">
+        <span class="lang-bn" lang="bn">ভিআইপি ছাঁকনি</span>
+        <span class="lang-en" lang="en">VIP filters</span>
+      </span>
+      <div class="filters" role="group" aria-labelledby="filterLabel">
+        <button type="button" data-filter="repeat" aria-pressed="false">
+          <span class="lang-bn" lang="bn">একই অঙ্ক ৭৭৭</span>
+          <span class="lang-en" lang="en">Repeats 777</span>
+        </button>
+        <button type="button" data-filter="sequence" aria-pressed="false">
+          <span class="lang-bn" lang="bn">ক্রম ১২৩৪</span>
+          <span class="lang-en" lang="en">Sequence 1234</span>
+        </button>
+        <button type="button" data-filter="mirror" aria-pressed="false">
+          <span class="lang-bn" lang="bn">উল্টো</span>
+          <span class="lang-en" lang="en">Mirror</span>
+        </button>
+        <button type="button" data-filter="pair" aria-pressed="false">AABB / ABAB</button>
+        <button type="button" data-filter="lucky" aria-pressed="false">
+          <span class="lang-bn" lang="bn">৭৮৬ ও ভাগ্য</span>
+          <span class="lang-en" lang="en">786 &amp; lucky</span>
+        </button>
+        <button type="button" data-filter="many" aria-pressed="false">
+          <span class="lang-bn" lang="bn">এক অঙ্ক অনেকবার</span>
+          <span class="lang-en" lang="en">Many of one digit</span>
+        </button>
+        <button type="button" data-filter="date" aria-pressed="false">
+          <span class="lang-bn" lang="bn">জন্মদিন / সাল</span>
+          <span class="lang-en" lang="en">Birthday / year</span>
+        </button>
+      </div>
+
+      <span class="lbl">
+        <span class="lang-bn" lang="bn">চেষ্টা করে দেখুন</span>
+        <span class="lang-en" lang="en">Try one</span>
+      </span>
+      <div class="examples">
+        <button type="button" data-example="contains:786">786</button>
+        <button type="button" data-example="ends:0000">0000</button>
+        <button type="button" data-example="contains:1234">1234</button>
+        <button type="button" data-example="pattern:018**786***">018**786***</button>
+        <button type="button" data-example="browse:">
+          <span class="lang-bn" lang="bn">এখনকার খালি নম্বর</span>
+          <span class="lang-en" lang="en">Numbers free now</span>
+        </button>
+      </div>
+
+      <div class="row">
+        <button class="go" id="go" type="submit">
+          <span class="lang-bn" lang="bn">খুঁজুন</span>
+          <span class="lang-en" lang="en">Search</span>
+        </button>
+        <button class="stop" id="stop" type="button" hidden>
+          <span class="lang-bn" lang="bn">থামান</span>
+          <span class="lang-en" lang="en">Stop</span>
+        </button>
+      </div>
+    </form>
+
+    <p class="status" id="status" aria-live="polite"></p>
+    <div class="bar" id="bar" hidden><span id="barFill"></span></div>
+
+    <section aria-live="polite">
+      <div class="block-h">
+        <h3 id="resultTitle">
+          <span class="lang-bn" lang="bn">ফলাফল</span>
+          <span class="lang-en" lang="en">Results</span>
+        </h3>
+        <span id="resultCount"></span>
+      </div>
+      <div class="list" id="results"></div>
+      <button class="ghost more" id="more" type="button" hidden>
+        <span class="lang-bn" lang="bn">আরও খুঁজুন</span>
+        <span class="lang-en" lang="en">Search more</span>
+      </button>
+    </section>
+
+    <section id="otherBlock" hidden>
+      <div class="block-h">
+        <h3>
+          <span class="lang-bn" lang="bn">এই খোঁজে আরও যেগুলো খালি</span>
+          <span class="lang-en" lang="en">Other free numbers from this search</span>
+        </h3>
+      </div>
+      <p class="hint">
+        <span class="lang-bn" lang="bn">এগুলো আপনার শর্তের মিল নয়। অপারেটর এই মুহূর্তে এগুলো খালি বলেছে।</span>
+        <span class="lang-en" lang="en">These do not match what you asked for. The operator listed them as free just now.</span>
+      </p>
+      <div class="list" id="others"></div>
+    </section>
+
+    <section>
+      <div class="block-h">
+        <h3>
+          <span class="lang-bn" lang="bn">পছন্দের নম্বর</span>
+          <span class="lang-en" lang="en">Favorites</span>
+        </h3>
+        <span>
+          <span class="lang-bn" lang="bn">এই ফোনেই থাকে</span>
+          <span class="lang-en" lang="en">Kept on this phone</span>
+        </span>
+      </div>
+      <div class="list" id="favs"></div>
+    </section>
+
+    <section class="fine">
+      <h3>
+        <span class="lang-bn" lang="bn">এটা কীভাবে কাজ করে</span>
+        <span class="lang-en" lang="en">How this works</span>
+      </h3>
+      <p>
+        <span class="lang-bn" lang="bn">খালি নম্বর আসে রবির পাবলিক প্রিপেইড তালিকা থেকে। রবি ০১৮, এয়ারটেল/Cirkle ০১৬, একই তালিকায়। লগইন লাগে না। এক খোঁজে অল্প কয়েকবার জিজ্ঞেস করা হয়, আর ফল কিছুক্ষণ এই ফোনেই থাকে।</span>
+        <span class="lang-en" lang="en">Free numbers come from Robi’s public prepaid list. Robi is 018 and Airtel/Cirkle is 016, on that same list. No login. Each search asks only a few times, and the answers stay on this phone for a short while.</span>
+      </p>
+      <p>
+        <span class="lang-bn" lang="bn">অপারেটর আলাদা নম্বরের দাম পাঠায় না। দাম দেখতে ও কিনতে তাদের নিজের পাতায় যান। নম্বরটা কপি হয়ে যাবে, সেখানে বসিয়ে নিন।</span>
+        <span class="lang-en" lang="en">The operator does not send a separate price for a number. Price and purchase are on their own page. The number is copied so you can paste it there.</span>
+      </p>
+      <h3>
+        <span class="lang-bn" lang="bn">সতর্কতা</span>
+        <span class="lang-en" lang="en">Disclaimer</span>
+      </h3>
+      <p>
+        <span class="lang-bn" lang="bn">যে নম্বর এখানে খালি দেখায়, কেনার সময় বদলে যেতে পারে। এই পাতা রবি বা এয়ারটেল/Cirkle-এর নয়, তাদের সঙ্গে যুক্ত নয়। এখানে সিম বিক্রি হয় না, টাকা নেওয়া হয় না, নাম-ফোন-এনআইডি কিছু জমা হয় না। পছন্দের তালিকা শুধু আপনার ব্রাউজারে থাকে।</span>
+        <span class="lang-en" lang="en">A number shown as free can change before you buy it. This page is not Robi or Airtel/Cirkle, and it is not affiliated with them. It does not sell SIMs, take payment, or collect your name, phone, or ID. Favorites stay in your browser only.</span>
+      </p>
+      <p>
+        <a href="https://www.robi.com.bd/en/sim-services?service=prepaid" target="_blank" rel="noopener noreferrer">
+          <span class="lang-bn" lang="bn">রবিতে কিনুন</span>
+          <span class="lang-en" lang="en">Buy on Robi</span>
+        </a>
+        ·
+        <a href="https://cirkle.digital/en/sim-services?service=prepaid" target="_blank" rel="noopener noreferrer">
+          <span class="lang-bn" lang="bn">Cirkle-এ কিনুন</span>
+          <span class="lang-en" lang="en">Buy on Cirkle</span>
+        </a>
+      </p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>© 2026 <a href="../">
+      <span class="lang-bn" lang="bn">রবিন</span>
+      <span class="lang-en" lang="en">Robin</span>
+    </a></p>
+  </footer>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="js/vip.js"></script>
+</body>
+</html>

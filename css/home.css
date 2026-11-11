@@ -493,7 +493,7 @@ h2 {
   .cta { width: 100%; }
   .tools { grid-template-columns: repeat(3, 1fr); }
   .services { grid-template-columns: repeat(3, 1fr); }
-  .work { grid-template-columns: 1.2fr 0.8fr; }
+  .work { grid-template-columns: repeat(3, 1fr); }
   .contact { padding: 2rem 1.6rem; }
 }
 
