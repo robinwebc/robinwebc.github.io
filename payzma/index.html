@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Payzma — test mode</title>
+  <meta name="description" content="Payzma is a global online banking app in test mode. It is not live. USD is the main wallet currency. Account IDs look like PM123456789." data-desc-bn="পেজমা একটি গ্লোবাল অনলাইন ব্যাংকিং অ্যাপ, টেস্ট মোডে। এখনো লাইভ নয়। মূল ব্যালেন্স USD। অ্যাকাউন্ট আইডি PM123456789-এর মতো।" data-desc-en="Payzma is a global online banking app in test mode. It is not live. USD is the main wallet currency. Account IDs look like PM123456789.">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="theme-color" content="#003087">
+  <link rel="canonical" href="https://robinwebc.github.io/payzma/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://robinwebc.github.io/payzma/">
+  <meta property="og:title" content="Payzma — test mode" data-title-bn="পেজমা — টেস্ট মোড" data-title-en="Payzma — test mode">
+  <meta property="og:description" content="Payzma is a global online banking app in test mode. It is not live. USD is the main wallet currency. Account IDs look like PM123456789." data-desc-bn="পেজমা একটি গ্লোবাল অনলাইন ব্যাংকিং অ্যাপ, টেস্ট মোডে। এখনো লাইভ নয়। মূল ব্যালেন্স USD। অ্যাকাউন্ট আইডি PM123456789-এর মতো।" data-desc-en="Payzma is a global online banking app in test mode. It is not live. USD is the main wallet currency. Account IDs look like PM123456789.">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="bn_BD">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/payzma.css">
+  <script>
+    try {
+      var saved = localStorage.getItem("robin-lang");
+      if (saved === "en" || saved === "bn") {
+        document.documentElement.setAttribute("data-lang", saved);
+        document.documentElement.lang = saved;
+      }
+    } catch (e) {}
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Payzma",
+    "alternateName": "পেজমা",
+    "url": "https://payzma.com",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Android",
+    "downloadUrl": "https://github.com/robinwebc/robinwebc.github.io/releases/latest",
+    "author": { "@type": "Person", "name": "Robin", "url": "https://github.com/robinwebc" },
+    "description": "Test-mode global online banking app. Not live. Multi-currency wallets with USD as the main balance.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body data-title-bn="পেজমা — টেস্ট মোড" data-title-en="Payzma — test mode">
+  <a class="skip" href="#content">
+    <span class="lang-bn" lang="bn">মূল অংশে যান</span>
+    <span class="lang-en" lang="en">Skip to content</span>
+  </a>
+  <p class="test-banner">
+    <strong>
+      <span class="lang-bn" lang="bn">টেস্ট মোড</span>
+      <span class="lang-en" lang="en">Test mode</span>
+    </strong>
+    <span>
+      <span class="lang-bn" lang="bn">এখনো লাইভ নয়। ব্যালেন্স আসল টাকা নয়।</span>
+      <span class="lang-en" lang="en">Not live yet. Balances are not real money.</span>
+    </span>
+  </p>
+  <header class="top">
+    <div class="bar">
+      <a class="brand" href="./">
+        <img class="logo" src="favicon.svg" width="40" height="40" alt="">
+        <span>Payzma</span>
+      </a>
+      <div class="top-actions">
+        <a class="home-link" href="../">
+          <span class="lang-bn" lang="bn">রবিন</span>
+          <span class="lang-en" lang="en">Robin</span>
+        </a>
+        <div class="lang">
+          <button type="button" data-lang-toggle>
+            <span class="lang-en" lang="bn">বাংলা</span>
+            <span class="lang-bn" lang="en">English</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <main id="content">
+      <section class="hero" aria-labelledby="payzma-title">
+        <div>
+          <p class="kicker">
+            <span class="lang-bn" lang="bn">পেজমা · টেস্ট মোড</span>
+            <span class="lang-en" lang="en">Payzma · Test mode</span>
+          </p>
+          <h1 id="payzma-title">
+            <span class="lang-bn" lang="bn">পাঠানোর আগে প্রাপকের প্রোফাইল দেখুন</span>
+            <span class="lang-en" lang="en">See the receiver’s profile before you send</span>
+          </h1>
+          <p class="lead">
+            <span class="lang-bn" lang="bn">পেজমা একটি গ্লোবাল অনলাইন ব্যাংকিং অ্যাপ, এখনো লাইভ নয়। অ্যাকাউন্ট আইডি PM123456789-এর মতো। কিউআর স্ক্যান করুন, বা রিসিভার কোড পেস্ট করুন — ছবিসহ প্রোফাইল আসে। ওয়ালেট বহুমুদ্রা, মূল ব্যালেন্স USD।</span>
+            <span class="lang-en" lang="en">Payzma is a global online banking app, and it is not live yet. Account IDs look like PM123456789. Scan a QR or paste a receiver code, and their profile appears with a photo. Wallets are multi-currency, with USD as the main balance.</span>
+          </p>
+          <div class="cta" id="download">
+            <a class="dl" href="https://github.com/robinwebc/robinwebc.github.io/releases/latest" target="_blank" rel="noopener noreferrer" aria-describedby="dl-note dl-test">
+              <span class="lang-bn" lang="bn">ডাউনলোড</span>
+              <span class="lang-en" lang="en">Download</span>
+            </a>
+            <p class="note" id="dl-note">
+              <span class="lang-bn" lang="bn">অ্যাপ বিল্ড সর্বশেষ GitHub রিলিজে থাকবে। এখন না পেলে, শিগগির আসছে।</span>
+              <span class="lang-en" lang="en">The app build will be on the latest GitHub release. If it is not there yet, it is coming soon.</span>
+            </p>
+            <p class="near" id="dl-test">
+              <span class="lang-bn" lang="bn">টেস্ট মোড। এখনো লাইভ নয়।</span>
+              <span class="lang-en" lang="en">Test mode. Not live yet.</span>
+            </p>
+          </div>
+        </div>
+        <div class="phone" aria-hidden="true">
+          <div class="screen">
+            <div class="screen-bar">
+              <img src="favicon.svg" width="22" height="22" alt="">
+              <span>Payzma</span>
+            </div>
+            <p class="screen-kicker">
+              <span class="lang-bn" lang="bn">USD · পাঠানোর আগে</span>
+              <span class="lang-en" lang="en">USD · Before you send</span>
+            </p>
+            <div class="who">
+              <span class="who-photo"></span>
+              <div>
+                <strong>
+                  <span class="lang-bn" lang="bn">প্রাপক</span>
+                  <span class="lang-en" lang="en">Receiver</span>
+                </strong>
+                <span>PM123456789</span>
+              </div>
+            </div>
+            <p class="amt">$500</p>
+            <div class="screen-btn">
+              <span class="lang-bn" lang="bn">নিশ্চিত</span>
+              <span class="lang-en" lang="en">Confirm</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="account-region">
+        <h2 id="account-region">
+          <span class="lang-bn" lang="bn">অ্যাকাউন্ট</span>
+          <span class="lang-en" lang="en">The account</span>
+        </h2>
+        <div class="cards">
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">অ্যাকাউন্ট আইডি</span>
+              <span class="lang-en" lang="en">Account ID</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">প্রতিটি অ্যাকাউন্টের আইডি PM দিয়ে শুরু, যেমন PM123456789।</span>
+              <span class="lang-en" lang="en">Every account ID starts with PM, for example PM123456789.</span>
+            </p>
+          </article>
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">Google, পাসকি, ফিঙ্গারপ্রিন্ট</span>
+              <span class="lang-en" lang="en">Google, passkey, fingerprint</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">ঢোকা যায় Google, পাসকি, বা ফোনের ফিঙ্গারপ্রিন্ট দিয়ে।</span>
+              <span class="lang-en" lang="en">Sign in with Google, a passkey, or the fingerprint on your phone.</span>
+            </p>
+          </article>
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">কেওয়াইসি</span>
+              <span class="lang-en" lang="en">KYC</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">পরিচয় যাচাই আলাদা থাকে। অন্য ব্যবহারকারীকে দেখানো হয় না, বিক্রিও হয় না।</span>
+              <span class="lang-en" lang="en">Identity checks stay private. They are not shown to other users and are not sold.</span>
+            </p>
+          </article>
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">বহুমুদ্রার ওয়ালেট</span>
+              <span class="lang-en" lang="en">Multi-currency wallets</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">এক অ্যাকাউন্টে একাধিক মুদ্রা। মূল ব্যালেন্স USD।</span>
+              <span class="lang-en" lang="en">One account can hold more than one currency. USD is the main balance.</span>
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="pay-region">
+        <h2 id="pay-region">
+          <span class="lang-bn" lang="bn">পাঠানো</span>
+          <span class="lang-en" lang="en">Sending</span>
+        </h2>
+        <div class="cards">
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">কিউআর বা রিসিভার কোড</span>
+              <span class="lang-en" lang="en">QR or receiver code</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">কিউআর স্ক্যান করুন, অথবা কোড পেস্ট করুন। পাঠানোর আগে প্রাপকের প্রোফাইল ও ছবি দেখা যায়।</span>
+              <span class="lang-en" lang="en">Scan a QR, or paste a receiver code. Their profile and photo show before you send.</span>
+            </p>
+          </article>
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">পিয়ার-টু-পিয়ার</span>
+              <span class="lang-en" lang="en">Person-to-person</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">এক পেজমা অ্যাকাউন্ট থেকে আরেকটিতে। টেস্ট ব্যালেন্স আসল টাকা নয়।</span>
+              <span class="lang-en" lang="en">From one Payzma account to another. A test balance is not real money.</span>
+            </p>
+          </article>
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">আন্তর্জাতিক ব্যাংক ট্রান্সফার</span>
+              <span class="lang-en" lang="en">International bank transfers</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">অন্য দেশের ব্যাংক অ্যাকাউন্টে পাঠানোর পথ আছে। এখনো লাইভ নয়।</span>
+              <span class="lang-en" lang="en">The app can start a transfer to a bank account in another country. It is not live yet.</span>
+            </p>
+          </article>
+        </div>
+        <h2>
+          <span class="lang-bn" lang="bn">একটি সেন্ড যেভাবে হয়</span>
+          <span class="lang-en" lang="en">How a send works</span>
+        </h2>
+        <ol class="steps">
+          <li>
+            <span class="n">01</span>
+            <p>
+              <span class="lang-bn" lang="bn">কিউআর স্ক্যান করুন, বা PM কোড পেস্ট করুন।</span>
+              <span class="lang-en" lang="en">Scan a QR, or paste a PM code.</span>
+            </p>
+          </li>
+          <li>
+            <span class="n">02</span>
+            <p>
+              <span class="lang-bn" lang="bn">প্রাপকের প্রোফাইল খোলে — ছবি ও PM123456789-এর মতো আইডি।</span>
+              <span class="lang-en" lang="en">The receiver’s profile opens, with their photo and an ID such as PM123456789.</span>
+            </p>
+          </li>
+          <li>
+            <span class="n">03</span>
+            <p>
+              <span class="lang-bn" lang="bn">মিলিয়ে দেখে Google, পাসকি, বা ফিঙ্গারপ্রিন্ট দিয়ে নিশ্চিত করুন।</span>
+              <span class="lang-en" lang="en">Check it is the right person, then confirm with Google, a passkey, or a fingerprint.</span>
+            </p>
+          </li>
+          <li>
+            <span class="n">04</span>
+            <p>
+              <span class="lang-bn" lang="bn">এন্ট্রি হ্যাশ-চেইন খাতায় যুক্ত হয়। টেস্ট এন্ট্রি আসল টাকা নয়।</span>
+              <span class="lang-en" lang="en">The entry joins a hash-chained ledger. A test entry is not real money.</span>
+            </p>
+          </li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="book-region">
+        <h2 id="book-region">
+          <span class="lang-bn" lang="bn">খাতা ও তালা</span>
+          <span class="lang-en" lang="en">Ledger and lock</span>
+        </h2>
+        <div class="cards">
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">হ্যাশ-চেইন খাতা</span>
+              <span class="lang-en" lang="en">Hash-chained ledger</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">প্রতিটি এন্ট্রি আগের এন্ট্রির হ্যাশ ধরে। পুরোনো এন্ট্রি বদলালে চেইন মিলবে না, তাই বদল ধরা পড়ে।</span>
+              <span class="lang-en" lang="en">Each entry stores a hash of the previous one. Change an older entry and the chain no longer matches, so the change can be seen.</span>
+            </p>
+          </article>
+          <article class="card">
+            <h3>
+              <span class="lang-bn" lang="bn">২৪ ঘণ্টার লক</span>
+              <span class="lang-en" lang="en">24-hour lock</span>
+            </h3>
+            <p>
+              <span class="lang-bn" lang="bn">রিকভারির পর, বা প্ল্যাটফর্মের ট্রান্সফারের পর, ২৪ ঘণ্টা পাঠানো বন্ধ থাকে।</span>
+              <span class="lang-en" lang="en">After recovery, or after a transfer made by the platform, sending stays locked for 24 hours.</span>
+            </p>
+          </article>
+        </div>
+        <div class="callout">
+          <p><strong class="stamp">TEST MODE</strong></p>
+          <p>
+            <span class="lang-bn" lang="bn">পেজমা এখন টেস্ট মোডে এবং লাইভ নয়। এটি লাইসেন্সপ্রাপ্ত ব্যাংক নয়। টেস্ট ব্যালেন্সকে আসল টাকা ভাববেন না।</span>
+            <span class="lang-en" lang="en">Payzma is in test mode and is not live. It is not a licensed bank. Do not treat a test balance as real money.</span>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a href="privacy/">
+        <span class="lang-bn" lang="bn">গোপনীয়তা</span>
+        <span class="lang-en" lang="en">Privacy</span>
+      </a>
+      <a href="https://github.com/robinwebc/robinwebc.github.io/releases/latest" target="_blank" rel="noopener noreferrer">
+        <span class="lang-bn" lang="bn">ডাউনলোড</span>
+        <span class="lang-en" lang="en">Download</span>
+      </a>
+      <a href="https://payzma.com" rel="noopener noreferrer">payzma.com</a>
+      <a href="../">
+        <span class="lang-bn" lang="bn">রবিনের পাতা</span>
+        <span class="lang-en" lang="en">Robin’s page</span>
+      </a>
+      <p>
+        <span class="lang-bn" lang="bn">টেস্ট মোড · এখনো লাইভ নয় · আসল টাকা নয়।</span>
+        <span class="lang-en" lang="en">Test mode · not live yet · not real money.</span>
+      </p>
+    </footer>
+  </div>
+  <script src="../js/lang.js"></script>
+</body>
+</html>
