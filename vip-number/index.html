@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="bn" data-lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ভিআইপি নম্বর খুঁজুন</title>
+  <meta name="description" content="বাংলাদেশের অপারেটরের কাছে কেনা যায় এমন মনে রাখার মতো মোবাইল নম্বর খুঁজুন। আমরা বিক্রি করি না।" data-desc-bn="বাংলাদেশের অপারেটরের কাছে কেনা যায় এমন মনে রাখার মতো মোবাইল নম্বর খুঁজুন। আমরা বিক্রি করি না।" data-desc-en="Find easy-to-remember Bangladeshi mobile numbers that operators currently offer for sale. We do not sell SIMs.">
+  <meta name="theme-color" content="#fff3ea">
+  <meta name="author" content="Robin">
+  <link rel="canonical" href="https://robinwebc.github.io/vip-number/">
+  <meta property="og:title" content="ভিআইপি নম্বর খুঁজুন">
+  <meta property="og:description" content="কেনা যায় এমন ভিআইপি মোবাইল নম্বর। রবি, সার্কল, বাংলালিংক, গ্রামীণফোন।">
+  <meta property="og:url" content="https://robinwebc.github.io/vip-number/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="bn_BD">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+  <script>
+    try {
+      var chosen = localStorage.getItem("vip-lang");
+      if (chosen === "en" || chosen === "bn") {
+        document.documentElement.setAttribute("data-lang", chosen);
+        document.documentElement.lang = chosen;
+      }
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#search">
+    <span class="lang-bn" lang="bn">খোঁজে যান</span>
+    <span class="lang-en" lang="en">Skip to search</span>
+  </a>
+  <header class="wrap top">
+    <a class="home" href="/" aria-label="Robin">R</a>
+    <div class="titles">
+      <p class="eyebrow">VIP Number Finder</p>
+      <h1>
+        <span class="lang-bn" lang="bn">ভিআইপি নম্বর খুঁজুন</span>
+        <span class="lang-en" lang="en">Find a VIP number</span>
+      </h1>
+    </div>
+    <button class="lang" type="button" id="langBtn">
+      <span class="lang-bn" lang="en">English</span>
+      <span class="lang-en" lang="bn">বাংলা</span>
+    </button>
+  </header>
+
+  <main class="wrap">
+    <p class="lede">
+      <span class="lang-bn" lang="bn">মনে রাখার মতো নম্বর, যেগুলো অপারেটরের নিজের পেজে এখন কেনা যায়। আমরা সিম বিক্রি করি না, টাকা নিই না, এবং নাম বা এনআইডি রাখি না।</span>
+      <span class="lang-en" lang="en">Easy-to-remember numbers that the operator’s own shop currently offers. We never sell a SIM, take payment, or store your name or NID.</span>
+    </p>
+
+    <div class="ops" id="ops"></div>
+    <div class="prefixes" id="prefixes" hidden></div>
+
+    <form class="panel" id="search">
+      <div class="modes" id="modes"></div>
+      <div class="field">
+        <label id="qLabel" for="q"></label>
+        <input id="q" name="q" type="text" inputmode="tel" autocomplete="off" maxlength="16" enterkeyhint="search">
+        <p class="hint" id="qHint"></p>
+      </div>
+      <div class="chips" id="chips"></div>
+      <div class="field">
+        <label id="birthLabel" for="birth"></label>
+        <input id="birth" name="birth" type="text" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="15081998">
+      </div>
+      <div class="filters" id="filters"></div>
+      <div class="row">
+        <button class="go" id="go" type="submit"></button>
+        <button class="textbtn" id="more" type="button" hidden></button>
+      </div>
+    </form>
+
+    <p class="status" id="status" role="status"></p>
+    <div class="notes" id="notes"></div>
+    <div class="results" id="results"></div>
+
+    <section class="favs" id="favs">
+      <h2>
+        <span class="lang-bn" lang="bn">পছন্দের নম্বর</span>
+        <span class="lang-en" lang="en">Favorites</span>
+      </h2>
+      <div id="favList"></div>
+    </section>
+
+    <footer class="foot">
+      <p>
+        <strong>
+          <span class="lang-bn" lang="bn">দাবিত্যাগ।</span>
+          <span class="lang-en" lang="en">Disclaimer.</span>
+        </strong>
+        <span class="lang-bn" lang="bn">নম্বরের প্রাপ্যতা ও দাম বদলাতে পারে। কেনার আগে অপারেটরের পেজে আবার দেখে নিন। এই টুল রবি, সার্কল, এয়ারটেল, বাংলালিংক বা গ্রামীণফোনের সঙ্গে যুক্ত নয়। তাদের নাম শুধু চেনার জন্য লেখা আছে, লোগোর ছবি ব্যবহার করা হয়নি।</span>
+        <span class="lang-en" lang="en">Availability and price can change. Check the operator’s page again before you buy. This tool is not affiliated with Robi, Cirkle, Airtel, Banglalink, or Grameenphone. Names are text only, so you can tell the networks apart. No trademark images are used.</span>
+      </p>
+    </footer>
+  </main>
+  <script src="js/score.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
