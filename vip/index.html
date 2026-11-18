@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="bn" data-lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ভিআইপি নাম্বার ফাইন্ডার — রবিন</title>
+  <meta name="description" content="রবি ০১৮ ও এয়ারটেল ০১৬ এর খালি ভিআইপি নাম্বার স্ক্যান করে। কেনাকাটা শুধু অপারেটরের অফিসিয়াল সাইটে। এই সাইট টাকা বা ব্যক্তিগত তথ্য নেয় না।">
+  <meta name="theme-color" content="#f4f1fb">
+  <meta name="author" content="Robin">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="VIP নাম্বার">
+  <link rel="canonical" href="https://robinwebc.github.io/vip/">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta property="og:title" content="ভিআইপি নাম্বার ফাইন্ডার — রবিন">
+  <meta property="og:description" content="রবি ও এয়ারটেলের খালি নাম্বার। কেনাকাটা শুধু অপারেটরের সাইটে।">
+  <meta property="og:url" content="https://robinwebc.github.io/vip/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="bn_BD">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+  <script>
+    try {
+      var chosen = localStorage.getItem("vip-live-lang");
+      if (chosen === "en" || chosen === "bn") {
+        document.documentElement.setAttribute("data-lang", chosen);
+        document.documentElement.lang = chosen;
+      }
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#finder">
+    <span class="bn" lang="bn">স্ক্যানে যান</span>
+    <span class="en" lang="en">Skip to scan</span>
+  </a>
+  <header class="top">
+    <div class="bar">
+      <a class="home" href="/" aria-label="Robin">R</a>
+      <div class="titles">
+        <p class="eyebrow">Robin</p>
+        <h1>
+          <span class="bn" lang="bn">ভিআইপি নাম্বার ফাইন্ডার</span>
+          <span class="en" lang="en">VIP number finder</span>
+        </h1>
+        <p class="sub">
+          <span class="bn" lang="bn">রবি ০১৮ · এয়ারটেল ০১৬ · শুধু খালি নাম্বার</span>
+          <span class="en" lang="en">Robi 018 · Airtel 016 · available numbers only</span>
+        </p>
+      </div>
+      <button class="install" id="install" type="button" hidden>ইনস্টল</button>
+      <button class="lang" id="langBtn" type="button">
+        <span class="bn" lang="en">English</span>
+        <span class="en" lang="bn">বাংলা</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="finder">
+    <p class="tagline">
+      <span class="bn" lang="bn">অনেকগুলো নাম্বার-ব্লক একসাথে স্ক্যান করে, শুধু যেগুলো এখন খালি সেগুলো দেখায়।</span>
+      <span class="en" lang="en">Scans many number blocks at once and shows only numbers that are free right now.</span>
+    </p>
+    <ol class="steps" aria-label="steps">
+      <li><b>1</b><span></span></li>
+      <li class="arrow" aria-hidden="true">→</li>
+      <li><b>2</b><span></span></li>
+      <li class="arrow" aria-hidden="true">→</li>
+      <li><b>3</b><span></span></li>
+    </ol>
+
+    <section class="card">
+      <div class="ops" id="ops" role="group"></div>
+
+      <label class="lbl" id="labCode" for="prefix"></label>
+      <div class="chips" id="prefixes"></div>
+      <input id="prefix" name="prefix" type="text" inputmode="numeric" maxlength="9" placeholder="018 / 01815 / 016" autocomplete="off" enterkeyhint="next">
+
+      <p class="lbl" id="labPos"></p>
+      <div class="pos-row" id="pos" role="group"></div>
+
+      <label class="lbl" id="labDigits" for="digits"></label>
+      <input id="digits" name="digits" type="text" inputmode="numeric" maxlength="8" placeholder="5555" autocomplete="off" enterkeyhint="search">
+      <div class="quick" id="quick"></div>
+
+      <div class="mask-box">
+        <p class="lbl" id="labMask"></p>
+        <p class="mask" id="mask" aria-live="polite"></p>
+        <p class="hint" id="maskHint"></p>
+      </div>
+
+      <div class="want-row">
+        <label class="lbl" id="labWant" for="want"></label>
+        <select id="want" aria-label="limit">
+          <option value="8">8</option>
+          <option value="12" selected>12</option>
+          <option value="24">24</option>
+        </select>
+      </div>
+
+      <p class="note" id="note" hidden></p>
+      <button class="go" id="go" type="button"></button>
+      <button class="stop" id="stop" type="button" hidden></button>
+
+      <div class="progress" id="progress" hidden>
+        <p class="prog" id="prog" role="status"></p>
+        <div class="bar" aria-hidden="true"><i id="bar" class="ind"></i></div>
+        <p class="blocks" id="blocks"></p>
+      </div>
+    </section>
+
+    <section class="results" id="results">
+      <h2 id="resTitle"></h2>
+      <div class="list" id="list"></div>
+      <button class="more" id="more" type="button" hidden></button>
+    </section>
+
+    <footer class="foot">
+      <p>
+        <strong>
+          <span class="bn" lang="bn">দাবিত্যাগ।</span>
+          <span class="en" lang="en">Disclaimer.</span>
+        </strong>
+        <span class="bn" lang="bn">নাম্বারগুলো রবি/এয়ারটেলের পাবলিক “নাম্বার খালি আছে কি না” যাচাই থেকে আসে। বাংলালিংকের খোলা তালিকাও দেখা হয়। কেনাকাটা শুধু অপারেটরের অফিসিয়াল সাইটে হয়; এই সাইট কোনো টাকা বা ব্যক্তিগত তথ্য নেয় না। পরে নাম্বার বিক্রি হয়ে যেতে পারে।</span>
+        <span class="en" lang="en">Numbers come from Robi/Airtel’s public “is this number available” check. Banglalink’s public list is read the same way. Purchases happen only on the operator’s official site; this site takes no money or personal data. A number may sell later.</span>
+      </p>
+      <p class="made">
+        <span class="bn" lang="bn">তৈরি করেছেন</span>
+        <span class="en" lang="en">Made by</span>
+        <b>Robin</b>
+        · <a href="https://github.com/robinwebc" target="_blank" rel="noopener noreferrer">GitHub</a>
+        · <a href="/">robinwebc</a>
+      </p>
+      <p>
+        <span class="bn" lang="bn">রবি, এয়ারটেল, বাংলালিংক, গ্রামীণফোন বা টেলিটকের সাথে যুক্ত নয়। নাম শুধু চেনার জন্য।</span>
+        <span class="en" lang="en">Not affiliated with Robi, Airtel, Banglalink, Grameenphone, or Teletalk. Names are text only.</span>
+      </p>
+    </footer>
+  </main>
+  <noscript>
+    <p>JavaScript চালু করলে নাম্বার স্ক্যান করা যাবে। / Turn on JavaScript to scan.</p>
+  </noscript>
+  <script src="js/scan.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

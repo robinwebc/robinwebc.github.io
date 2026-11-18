@@ -1,0 +1,32 @@
+{
+  "name": "ভিআইপি নাম্বার ফাইন্ডার",
+  "short_name": "VIP নাম্বার",
+  "description": "রবি ও এয়ারটেলের খালি ভিআইপি নাম্বার স্ক্যান। কেনাকাটা শুধু অপারেটরের সাইটে।",
+  "start_url": "/vip/",
+  "scope": "/vip/",
+  "display": "standalone",
+  "lang": "bn",
+  "dir": "ltr",
+  "background_color": "#f4f1fb",
+  "theme_color": "#f4f1fb",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
