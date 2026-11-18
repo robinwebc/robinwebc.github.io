@@ -145,6 +145,19 @@ svg { display: block; }
   box-shadow: 0 10px 22px -12px #7b6cff;
 }
 .nav-act { display: flex; align-items: center; gap: 0.45rem; margin-left: auto; }
+.nav-vip {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  min-height: 42px;
+  padding: 0 0.8rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #7b6cff, #14b8a6);
+  color: #fff;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 10px 20px -14px #5b4ee0;
+}
 .pill, .ibtn {
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.86);
@@ -493,7 +506,7 @@ h2 {
   .cta { width: 100%; }
   .tools { grid-template-columns: repeat(3, 1fr); }
   .services { grid-template-columns: repeat(3, 1fr); }
-  .work { grid-template-columns: repeat(3, 1fr); }
+  .work { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .contact { padding: 2rem 1.6rem; }
 }
 

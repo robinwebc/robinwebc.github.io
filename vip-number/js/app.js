@@ -1,357 +1,141 @@
-/* Public number search for Robin's VIP finder.
-   Banglalink is called the same way as banglalink.net/en/order-new-sim.
-   Robi and Cirkle are not searched here. Grameenphone needs the optional proxy. */
+/* VIP Number Finder. Live "on sale" only when Banglalink's public inventory
+   returns that exact number. Every other result is a pattern suggestion. */
 (function () {
-  /* Paste your Cloudflare Worker origin after deploy, with no trailing slash.
-     Example: "https://vip-number-proxy.your-name.workers.dev"
-     Visitors then get Grameenphone stock numbers too. Until then, leave this empty. */
-  var GP_PROXY = "";
-
-  var API = "https://web-api.banglalink.net/api/gateway/d2d-service/api/v1/channel";
+  var BL = "https://web-api.banglalink.net/api/gateway/d2d-service/api/v1/channel";
+  var SERIES_FALLBACK = ["01408", "01990", "01953", "01928", "01403"];
   var BUY = {
+    gp: "https://www.grameenphone.com/bn/shop/devices/sim",
     robi: "https://www.robi.com.bd/en/sim-services?service=prepaid",
     cirkle: "https://cirkle.digital/en/sim-services",
     bl: "https://banglalink.net/en/order-new-sim",
-    gp: "https://www.grameenphone.com/bn/shop/devices/sim"
+    tt: "https://sim.teletalk.com.bd:8443/"
   };
-  var GP_PRODUCTS = [
-    { nid: 211, prefix: "017" },
-    { nid: 213, prefix: "013" }
-  ];
-  var FALLBACK_SERIES = ["01408", "01990", "01953", "01928", "01403"];
-  var CODE_NAME = { N: "Normal", G: "Gold", S: "Silver", P: "Platinum" };
-  var FILTERS = ["repeat", "sequence", "mirror", "aabb", "abab", "abcabc", "lucky", "many", "birthday", "year"];
-  var MODES = ["contains", "ends", "starts", "pattern"];
-  var CHIPS = ["786", "000", "111", "1234", "999"];
+  var OPS = ["all", "gp", "robi", "cirkle", "bl", "tt"];
+  var MODES = ["ends", "contains", "starts", "pattern", "mask"];
+  var PAGE = 24;
 
   var COPY = {
     bn: {
-      q: "ডিজিট বা প্যাটার্ন",
+      q: { ends: "শেষের অঙ্ক", contains: "যে অঙ্ক থাকবে", starts: "যেভাবে শুরু", pattern: "আরও অঙ্ক (ঐচ্ছিক)", mask: "মাস্ক" },
       hint: {
-        contains: "২ থেকে ৬ ডিজিট। বাংলালিংক এই অঙ্কগুলো নম্বরের ভিতরে খোঁজে। যেমন ৭৮৬।",
-        ends: "২ থেকে ৬ ডিজিট। যে নম্বরগুলো এগুলো দিয়ে শেষ, সেগুলো রাখা হবে।",
-        starts: "০১৯ বা ০১৪ দিয়ে লিখুন। যেমন ০১৯৫৩।",
-        pattern: "যেমন ০১৯**৭৮৬***। তারকা মানে যেকোনো অঙ্ক।"
+        ends: "যেমন ৭৮৬ বা ০০০০। নম্বর এই অঙ্ক দিয়ে শেষ হবে।",
+        contains: "এই অঙ্কগুলো নম্বরের যেকোনো জায়গায় থাকবে।",
+        starts: "০১৭, ০১৮, ০১৯৫৩ — পুরো নম্বর এভাবে শুরু।",
+        pattern: "নিচ থেকে একটা প্যাটার্ন বাছুন। চাইলে আরও অঙ্ক লিখুন।",
+        mask: "X মানে যেকোনো অঙ্ক। যেমন 01X-XX77-77XX।"
       },
-      birth: "জন্মদিন বা সাল (ঐচ্ছিক)",
       go: "খুঁজুন",
       more: "আরও নম্বর",
-      searching: "অপারেটরের তালিকা আনা হচ্ছে…",
-      count: function (n) { return n + "টি নম্বর, ভালোগুলো আগে"; },
-      none: "এই শর্তে এখন নম্বর মেলেনি। অন্য অঙ্ক চেষ্টা করুন।",
-      needBl: "খুঁজতে বাংলালিংক চালু রাখুন। বাকি অপারেটরের কারণ নিচে।",
-      needPrefix: "০১৯ বা ০১৪, অন্তত একটা সিরিজ চালু রাখুন।",
-      digits: "২ থেকে ৬টি অঙ্ক দিন।",
-      startsHint: "শুরুতে খুঁজতে ০১৯ বা ০১৪ দিয়ে লিখুন।",
-      patternLen: "প্যাটার্ন ১১ অঙ্ক (০১৯**৭৮৬***) অথবা শেষের ৮ ঘর।",
-      copied: "কপি হয়েছে",
+      working: "সাজানো হচ্ছে…",
+      none: "এই শর্তে কিছু মেলেনি। অন্য অঙ্ক চেষ্টা করুন।",
+      count: function (n) { return n + "টি দেখানো হচ্ছে, ভালোগুলো আগে"; },
+      liveCount: function (n) { return n + "টি বাংলালিংকের তালিকায়"; },
+      liveFail: "বাংলালিংকের তালিকা এই মুহূর্তে আসেনি",
+      live: "বাংলালিংকের তালিকায় এখন আছে",
+      suggest: "প্যাটার্ন সাজেশন: অপারেটরের কাছে খালি আছে কিনা দেখে নিন।",
       copy: "কপি",
-      share: "শেয়ার",
+      copied: "কপি হয়েছে",
       fav: "পছন্দ",
       favOn: "পছন্দে আছে",
-      buy: "অফিসিয়াল পেজে কিনুন",
-      emptyFav: "পছন্দের নম্বর এখানে থাকবে, শুধু এই ফোনে।",
-      price: function (n) { return "৳" + n; },
-      cat: { Normal: "সাধারণ", Gold: "গোল্ড", Silver: "সিলভার", Platinum: "প্লাটিনাম" },
-      tags: {
+      buy: "অপারেটরের পেজে দেখুন",
+      emptyFav: "পছন্দের নম্বর এই ফোনে থাকবে।",
+      hist: "সাম্প্রতিক খোঁজ",
+      needPreset: "একটা প্যাটার্ন বাছুন।",
+      digitRange: "১ থেকে ৮টি অঙ্ক দিন। পুরো নম্বর হলে ১১টি।",
+      startsBad: "০১৩ থেকে ০১৯ দিয়ে শুরু করে লিখুন।",
+      opMismatch: "এই শুরুটা বাছাই করা অপারেটরের নয়।",
+      maskBad: "১১ ঘর দিন। যেমন 01X-XX77-77XX।",
+      score: "স্কোর",
+      tier: { platinum: "প্লাটিনাম", gold: "গোল্ড", silver: "সিলভার", standard: "সাধারণ" },
+      op: { all: "সব", gp: "গ্রামীণফোন", robi: "রবি", cirkle: "এয়ারটেল/সার্কল", bl: "বাংলালিংক", tt: "টেলিটক" },
+      mode: { ends: "শেষে", contains: "ভিতরে", starts: "শুরুতে", pattern: "প্যাটার্ন", mask: "মাস্ক" },
+      preset: {
         repeat: "একই অঙ্ক",
         sequence: "ক্রম",
         mirror: "উল্টো",
-        aabb: "AABB",
         abab: "ABAB",
-        abcabc: "ABCABC",
-        lucky: "৭৮৬",
-        many: "এক অঙ্ক বেশি",
-        birthday: "জন্মদিন",
+        aabb: "AABB",
+        xyyx: "XYYX",
+        triple: "তিন/চার",
+        pairs: "জোড়া জোড়া",
+        lucky: "ভাগ্য ৭৮৬",
         year: "সাল"
       },
-      modes: { contains: "ভিতরে আছে", ends: "শেষে", starts: "শুরুতে", pattern: "প্যাটার্ন" },
-      live: "কেনা যায়",
-      soon: "এখানে নয়",
-      prefixes: "সিরিজ",
-      score: "স্কোর",
-      fail: "বাংলালিংকের তালিকা এই মুহূর্তে আসেনি। একটু পরে আবার চেষ্টা করুন।",
-      cached: "একটু আগের তালিকা দেখানো হচ্ছে।",
-      shareText: function (n) { return "এই নম্বরটা দেখুন: " + n; },
-      notes: {
-        robi: {
-          t: "রবি ০১৮",
-          p: "রবির সিম পেজ নম্বর আনে fetchAvailaleSimList সার্ভার অ্যাকশন দিয়ে। টোকেন না থাকলে উত্তর captchaFailed। টোকেনটি robi.com.bd-এর Cloudflare Turnstile, তাই অন্য সাইট থেকে নেওয়া যায় না। আমরা ক্যাপচা এড়াই না। নম্বর দেখে কিনতে তাদের পেজ খুলুন।"
-        },
-        cirkle: {
-          t: "সার্কল ০১৬",
-          p: "এয়ারটেল বাংলাদেশ এখন সার্কল। bd.airtel.com সরিয়ে দেয় cirkle.digital-এ, আর হোমপেজে সিম কেনার লিংক /sim-services। এই ঠিকানা তাদের ফায়ারওয়ালে আটকে যায়, তাই পাবলিক সার্চ কল বের করা যায়নি। একই কোম্পানির রবি পেজ নম্বরের আগে Turnstile চায়। এখান থেকে সার্কল সার্চ চালু নেই।"
-        },
-        gp: {
-          t: "গ্রামীণফোন ০১৭ / ০১৩",
-          p: "গ্রামীণফোনের শপ এখন স্টক নম্বর দেখায়। কলটি bkshopthc.grameenphone.com/api/v1/sim/get-list, লগইন লাগে না। কিন্তু CORS শুধু grameenphone.com-কে ছাড়ে, তাই এই পেজ সরাসরি পড়তে পারে না। ডিজিট সার্চ নেই: একবারে অল্প কয়েকটি স্টক নম্বর। আগে নম্বর বাছাই বন্ধ ছিল, এখন শপ পেজে স্টক আছে। প্রক্সি বসালে এখানেও আসবে।"
-        }
-      },
-      proxyLabel: "প্রক্সির ঠিকানা (ঐচ্ছিক)",
-      proxySave: "প্রক্সি সেভ",
-      proxySteps: "ডিপ্লয়",
-      proxyHelp: "১) ফ্রি Cloudflare অ্যাকাউন্ট খুলুন। ২) এই রিপোর vip-number/proxy ফোল্ডারে npx wrangler login তারপর npx wrangler deploy। ৩) workers.dev ঠিকানাটি ওপরের ঘরে সেভ করুন। সবার জন্য চাইলে সেই ঠিকানা js/app.js-এর GP_PROXY-তে বসিয়ে আবার পাবলিশ করুন।"
+      install: "ইনস্টল",
+      title: "ভিআইপি নম্বর খুঁজুন"
     },
     en: {
-      q: "Digits or pattern",
+      q: { ends: "Ending digits", contains: "Digits inside", starts: "Starts with", pattern: "Also contains (optional)", mask: "Mask" },
       hint: {
-        contains: "2 to 6 digits. Banglalink looks for these digits inside a number. Try 786.",
-        ends: "2 to 6 digits. Only numbers that end with them are kept.",
-        starts: "Start with 019 or 014. For example 01953.",
-        pattern: "Example: 019**786***. A star is any digit."
+        ends: "Example: 786 or 0000. The number will end with these digits.",
+        contains: "These digits can sit anywhere in the number.",
+        starts: "017, 018, 01953 — the whole number starts this way.",
+        pattern: "Pick a pattern below. Add digits if you want them inside it.",
+        mask: "X is any digit. Example: 01X-XX77-77XX."
       },
-      birth: "Birthday or year (optional)",
       go: "Search",
       more: "More numbers",
-      searching: "Asking the operator for the current list…",
-      count: function (n) { return n + (n === 1 ? " number, best first" : " numbers, best first"); },
+      working: "Lining them up…",
       none: "Nothing matched. Try different digits.",
-      needBl: "Turn on Banglalink to search. The other networks are explained below.",
-      needPrefix: "Keep at least one of 019 or 014 on.",
-      digits: "Enter 2 to 6 digits.",
-      startsHint: "For “starts with”, begin with 019 or 014.",
-      patternLen: "Use 11 characters (019**786***) or the last 8.",
-      copied: "Copied",
+      count: function (n) { return "Showing " + n + ", best first"; },
+      liveCount: function (n) { return n + " on Banglalink’s list"; },
+      liveFail: "Banglalink’s list did not load",
+      live: "On Banglalink’s list right now",
+      suggest: "pattern suggestion: check availability with the operator",
       copy: "Copy",
-      share: "Share",
+      copied: "Copied",
       fav: "Save",
       favOn: "Saved",
-      buy: "Buy on the official page",
-      emptyFav: "Saved numbers stay here, only on this phone.",
-      price: function (n) { return "৳" + n; },
-      cat: { Normal: "Normal", Gold: "Gold", Silver: "Silver", Platinum: "Platinum" },
-      tags: {
-        repeat: "Repeated",
+      buy: "Check on the operator page",
+      emptyFav: "Saved numbers stay on this phone.",
+      hist: "Recent searches",
+      needPreset: "Pick a pattern.",
+      digitRange: "Enter 1 to 8 digits, or 11 for a full number.",
+      startsBad: "Start with 013–019.",
+      opMismatch: "That prefix is not this operator.",
+      maskBad: "Use 11 places. Example: 01X-XX77-77XX.",
+      score: "Score",
+      tier: { platinum: "Platinum", gold: "Gold", silver: "Silver", standard: "Standard" },
+      op: { all: "All", gp: "Grameenphone", robi: "Robi", cirkle: "Airtel/Cirkle", bl: "Banglalink", tt: "Teletalk" },
+      mode: { ends: "Ends", contains: "Contains", starts: "Starts", pattern: "Pattern", mask: "Mask" },
+      preset: {
+        repeat: "Repeating",
         sequence: "Sequence",
         mirror: "Mirror",
-        aabb: "AABB",
         abab: "ABAB",
-        abcabc: "ABCABC",
-        lucky: "786",
-        many: "One digit a lot",
-        birthday: "Birthday",
+        aabb: "AABB",
+        xyyx: "XYYX",
+        triple: "Triple/quad",
+        pairs: "Double pairs",
+        lucky: "Lucky 786",
         year: "Year"
       },
-      modes: { contains: "Contains", ends: "Ends with", starts: "Starts with", pattern: "Pattern" },
-      live: "On sale",
-      soon: "Not here",
-      prefixes: "Series",
-      score: "Score",
-      fail: "Banglalink’s list did not load. Try again in a moment.",
-      cached: "Showing the list from a moment ago.",
-      shareText: function (n) { return "Look at this number: " + n; },
-      notes: {
-        robi: {
-          t: "Robi 018",
-          p: "Robi’s SIM page loads numbers with the fetchAvailaleSimList server action. Without a token the answer is captchaFailed. That token is Cloudflare Turnstile locked to robi.com.bd, so another site cannot take it. This tool does not bypass the captcha. Open their page to see numbers and buy."
-        },
-        cirkle: {
-          t: "Cirkle 016",
-          p: "Airtel Bangladesh is now Cirkle. bd.airtel.com redirects to cirkle.digital, and the homepage links to /sim-services. That address is rejected by their firewall from here, so the public search call could not be read. Robi, on the same company’s web stack, asks for Turnstile before it lists numbers. Cirkle search is not available in this tool."
-        },
-        gp: {
-          t: "Grameenphone 017 / 013",
-          p: "Grameenphone’s shop does list stock numbers now. The call is bkshopthc.grameenphone.com/api/v1/sim/get-list and it does not need a login. CORS only allows grameenphone.com, so this page cannot read it directly. There is no digit search: each response is a small batch of stock. Number choice was reported paused earlier; the shop page currently returns stock. A proxy turns it on here."
-        }
-      },
-      proxyLabel: "Proxy URL (optional)",
-      proxySave: "Save proxy",
-      proxySteps: "Deploy",
-      proxyHelp: "1) Open a free Cloudflare account. 2) In vip-number/proxy run npx wrangler login, then npx wrangler deploy. 3) Save the workers.dev URL above. To turn it on for everyone, put that URL in GP_PROXY at the top of js/app.js and publish again."
+      install: "Install",
+      title: "VIP Number Finder"
     }
   };
 
   var state = {
-    ops: { robi: false, cirkle: false, bl: true, gp: false },
-    p019: true,
-    p014: true,
-    mode: "contains",
-    filters: {},
-    page: 1,
-    lastKey: "",
-    busy: false
+    op: "all",
+    mode: "ends",
+    presets: {},
+    run: 0,
+    cursor: null,
+    spec: null,
+    items: [],
+    liveFirst: [],
+    seen: {},
+    live: {},
+    liveError: false,
+    livePage: 0,
+    liveMore: false,
+    series: null
   };
-
-  var mem = new Map();
-  var chain = Promise.resolve();
-  var lastAt = 0;
-  var runId = 0;
 
   function lang() {
     return document.documentElement.getAttribute("data-lang") === "en" ? "en" : "bn";
   }
   function t() { return COPY[lang()]; }
-
-  function sleep(ms) {
-    return new Promise(function (resolve) { setTimeout(resolve, ms); });
-  }
-
-  function paced(task) {
-    var job = chain.then(function () {
-      var wait = Math.max(0, 420 - (Date.now() - lastAt));
-      return sleep(wait).then(task).then(function (value) {
-        lastAt = Date.now();
-        return value;
-      });
-    });
-    chain = job.then(function () {}, function () {});
-    return job;
-  }
-
-  function cachedGet(url, ttl, fresh) {
-    var now = Date.now();
-    if (!fresh) {
-      var hit = mem.get(url);
-      if (hit && now - hit.t < ttl) return Promise.resolve({ data: hit.data, cached: true });
-      try {
-        var raw = sessionStorage.getItem("vip-cache:" + url);
-        if (raw) {
-          var parsed = JSON.parse(raw);
-          if (parsed && now - parsed.t < ttl) {
-            mem.set(url, parsed);
-            return Promise.resolve({ data: parsed.data, cached: true });
-          }
-        }
-      } catch (e) {}
-    }
-    return paced(function () {
-      var ctrl = typeof AbortController === "function" ? new AbortController() : null;
-      var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 12000) : 0;
-      return fetch(url, ctrl ? { signal: ctrl.signal } : {}).then(function (res) {
-        if (timer) clearTimeout(timer);
-        if (!res.ok) throw new Error("http");
-        return res.json();
-      });
-    }).then(function (data) {
-      var rec = { t: Date.now(), data: data };
-      mem.set(url, rec);
-      try { sessionStorage.setItem("vip-cache:" + url, JSON.stringify(rec)); } catch (e) {}
-      return { data: data, cached: false };
-    });
-  }
-
-  function loadSeries(fresh) {
-    return cachedGet(API + "/msisdn-series", 10 * 60 * 1000, fresh).then(function (pack) {
-      var list = ((((pack.data || {}).payload || {}).data || {}).series || []);
-      var out = [];
-      list.forEach(function (item) {
-        var series = String(item.series || "");
-        if (/^01\d{3,5}$/.test(series)) out.push(series);
-      });
-      if (!out.length) throw new Error("empty");
-      return out;
-    }).catch(function () { return FALLBACK_SERIES.slice(); });
-  }
-
-  function loadPrices(fresh) {
-    return cachedGet(API + "/products/new_sim", 10 * 60 * 1000, fresh).then(function (pack) {
-      var product = ((((pack.data || {}).payload || {}).data || {}).product || {});
-      var map = {};
-      (product.bundle || []).forEach(function (row) {
-        if (row.connection_type !== "PREPAID" || row.sim_kit_type !== "Physical") return;
-        var price = Number(row.discount_price || row.regular_price || 0);
-        if (price > 0 && row.number_category) map[row.number_category] = price;
-      });
-      return map;
-    }).catch(function () { return {}; });
-  }
-
-  function selectedSeries(all) {
-    return all.filter(function (series) {
-      if (series.indexOf("019") === 0) return state.p019;
-      if (series.indexOf("014") === 0) return state.p014;
-      return false;
-    });
-  }
-
-  function inventoryUrl(prefix, postfix, page) {
-    return API + "/msisdn-inventory?msisdn_prefix=" + encodeURIComponent(prefix) +
-      "&msisdn_postfix=" + encodeURIComponent(postfix || "") +
-      "&show_special_number=false&page_number=" + page + "&page_size=15";
-  }
-
-  function nationalOf(msisdn) {
-    var d = String(msisdn || "");
-    if (d.indexOf("880") === 0) d = "0" + d.slice(3);
-    return /^01\d{9}$/.test(d) ? d : "";
-  }
-
-  function jobsFor(series, mode, digits, parsed) {
-    var jobs = [];
-    if (mode === "pattern") {
-      var lead = parsed.lead || "";
-      var nationalLead = (parsed.op || "") + lead;
-      var probe = (parsed.probe || "").slice(0, 6);
-      if (probe.length === 1) probe = "";
-      series.forEach(function (s) {
-        if (parsed.op && s.indexOf(parsed.op) !== 0) return;
-        var prefix;
-        if (nationalLead && (s.indexOf(nationalLead) === 0 || nationalLead.indexOf(s) === 0)) {
-          prefix = "88" + (nationalLead.length >= s.length ? nationalLead : s);
-        } else if (!parsed.op && !lead) {
-          prefix = "88" + s;
-        } else if (!parsed.op && lead && s.slice(3).indexOf(lead) === 0) {
-          prefix = "88" + s;
-        } else if (!lead) {
-          prefix = "88" + s;
-        } else return;
-        if (prefix.length > 13) return;
-        jobs.push({ prefix: prefix, postfix: prefix.length > ("88" + s).length ? "" : probe, series: s });
-      });
-      return jobs;
-    }
-    if (!digits) {
-      series.forEach(function (s) { jobs.push({ prefix: "88" + s, postfix: "", series: s }); });
-      return jobs;
-    }
-    if (mode === "starts") {
-      series.forEach(function (s) {
-        if (s.indexOf(digits) !== 0 && digits.indexOf(s) !== 0) return;
-        var prefix = "88" + (digits.length >= s.length ? digits : s);
-        if (prefix.length <= 13) jobs.push({ prefix: prefix, postfix: "", series: s });
-      });
-      return jobs;
-    }
-    series.forEach(function (s) {
-      jobs.push({ prefix: "88" + s, postfix: digits, series: s });
-    });
-    return jobs;
-  }
-
-  function keep(national, mode, digits, parsed) {
-    if (!national) return false;
-    if (mode === "pattern") return VipScore.matchesMask(national, parsed);
-    if (!digits) return true;
-    if (mode === "ends") return national.slice(-digits.length) === digits;
-    if (mode === "starts") return national.indexOf(digits) === 0;
-    return national.indexOf(digits) >= 0;
-  }
-
-  function categoryOf(item) {
-    if (item.number_category) return String(item.number_category);
-    return CODE_NAME[item.number_category_code] || "";
-  }
-
-  function readFavs() {
-    try {
-      var list = JSON.parse(localStorage.getItem("vip-number-favs") || "[]");
-      return Array.isArray(list) ? list : [];
-    } catch (e) {
-      return [];
-    }
-  }
-  function writeFavs(list) {
-    try { localStorage.setItem("vip-number-favs", JSON.stringify(list.slice(0, 40))); } catch (e) {}
-  }
-  function isFav(national) {
-    return readFavs().some(function (item) { return item.national === national; });
-  }
-
-  function gpProxy() {
-    var stored = "";
-    try { stored = localStorage.getItem("vip-gp-proxy") || ""; } catch (e) {}
-    return (stored || GP_PROXY || "").replace(/\/$/, "");
-  }
 
   function el(tag, cls, text) {
     var node = document.createElement(tag);
@@ -359,258 +143,322 @@
     if (text != null) node.textContent = text;
     return node;
   }
-
-  function button(cls, text, attrs) {
+  function button(cls, text) {
     var node = el("button", cls, text);
     node.type = "button";
-    if (attrs) {
-      Object.keys(attrs).forEach(function (key) { node.setAttribute(key, attrs[key]); });
-    }
     return node;
   }
 
-  function renderNumber(national, hi, seriesLen) {
-    var line = el("p", "num");
-    var hyphenAt = seriesLen || 5;
-    var i;
-    for (i = 0; i < national.length; i++) {
-      if (i === hyphenAt) line.appendChild(document.createTextNode("-"));
-      var on = hi && i >= hi.start && i < hi.end;
-      var bit = document.createElement(on ? "mark" : "span");
-      bit.textContent = national.charAt(i);
-      line.appendChild(bit);
+  function readList(key) {
+    try {
+      var list = JSON.parse(localStorage.getItem(key) || "[]");
+      return Array.isArray(list) ? list : [];
+    } catch (e) {
+      return [];
     }
-    return line;
+  }
+  function writeList(key, list) {
+    try { localStorage.setItem(key, JSON.stringify(list)); } catch (e) {}
+  }
+  function isFav(national) {
+    return readList("vip-number-favs").some(function (item) { return item && item.national === national; });
+  }
+  function toggleFav(national) {
+    var list = readList("vip-number-favs").filter(function (item) { return item && item.national !== national; });
+    if (!isFav(national)) list.unshift({ national: national, operator: VipGen.operatorOf(national) });
+    writeList("vip-number-favs", list.slice(0, 80));
+  }
+
+  function remember(spec) {
+    var key = JSON.stringify([spec.op, spec.mode, spec.digits, spec.mask, spec.presets]);
+    var list = readList("vip-number-history").filter(function (item) { return item && item.key !== key; });
+    list.unshift({ key: key, op: spec.op, mode: spec.mode, digits: spec.digits, mask: spec.mask, presets: spec.presets });
+    writeList("vip-number-history", list.slice(0, 12));
+  }
+
+  function historyLabel(item) {
+    var c = t();
+    var bits = [c.op[item.op] || item.op, c.mode[item.mode] || item.mode];
+    if (item.mode === "mask") bits.push(item.mask);
+    else if (item.digits) bits.push(item.digits);
+    if (item.presets && item.presets.length) {
+      bits.push(item.presets.map(function (id) { return c.preset[id] || id; }).join(" "));
+    }
+    return bits.join(" · ");
+  }
+
+  function setLang(next) {
+    document.documentElement.setAttribute("data-lang", next);
+    document.documentElement.lang = next;
+    try {
+      localStorage.setItem("vip-lang", next);
+      localStorage.setItem("robin-lang", next);
+    } catch (e) {}
+    renderChrome();
+    repaint();
+  }
+
+  function renderChrome() {
+    var c = t();
+    document.title = c.title;
+    document.getElementById("go").textContent = c.go;
+    document.getElementById("more").textContent = c.more;
+    document.getElementById("qLabel").textContent = c.q[state.mode];
+    document.getElementById("hint").textContent = c.hint[state.mode];
+    var install = document.getElementById("install");
+    if (install) install.textContent = c.install;
+    var input = document.getElementById("q");
+    input.placeholder = state.mode === "mask" ? "01X-XX77-77XX" : (state.mode === "pattern" ? "786" : "786");
+    input.inputMode = state.mode === "mask" ? "text" : "numeric";
+    renderOps();
+    renderModes();
+    renderPresets();
+    renderQuick();
+    renderHistory();
+    paintStatus();
   }
 
   function renderOps() {
     var root = document.getElementById("ops");
+    var c = t();
     root.textContent = "";
-    var spec = [
-      ["robi", "robi", "018", false],
-      ["cirkle", "cirkle", "016", false],
-      ["bl", "banglalink", "019 · 014", true],
-      ["gp", "GP", "017 · 013", false]
-    ];
-    spec.forEach(function (item) {
-      var id = item[0];
-      var node = button("op", "", { "data-op": id, "aria-pressed": state.ops[id] ? "true" : "false" });
-      node.appendChild(el("span", "word", item[1]));
-      node.appendChild(el("span", "meta", item[2]));
-      node.appendChild(el("span", item[3] ? "pill" : "pill wait", item[3] ? t().live : t().soon));
+    OPS.forEach(function (id) {
+      var node = button("op" + (state.op === id ? " on" : ""), c.op[id]);
+      node.setAttribute("aria-pressed", state.op === id ? "true" : "false");
+      var meta = el("small", "", id === "all" ? "" : { gp: "017/013", robi: "018", cirkle: "016", bl: "019/014", tt: "015" }[id]);
+      if (meta.textContent) node.appendChild(meta);
       node.addEventListener("click", function () {
-        state.ops[id] = !state.ops[id];
+        state.op = id;
         renderOps();
-        renderPrefixes();
-        renderNotes();
       });
       root.appendChild(node);
-    });
-  }
-
-  function renderPrefixes() {
-    var row = document.getElementById("prefixes");
-    row.textContent = "";
-    row.hidden = !state.ops.bl;
-    if (!state.ops.bl) return;
-    ["019", "014"].forEach(function (prefix) {
-      var on = prefix === "019" ? state.p019 : state.p014;
-      var node = button("mini", prefix, { "aria-pressed": on ? "true" : "false" });
-      node.addEventListener("click", function () {
-        if (prefix === "019") state.p019 = !state.p019;
-        else state.p014 = !state.p014;
-        renderPrefixes();
-      });
-      row.appendChild(node);
     });
   }
 
   function renderModes() {
     var root = document.getElementById("modes");
+    var c = t();
     root.textContent = "";
-    MODES.forEach(function (mode) {
-      var node = button("mode", t().modes[mode], { "aria-pressed": state.mode === mode ? "true" : "false" });
+    MODES.forEach(function (id) {
+      var node = button("mode" + (state.mode === id ? " on" : ""), c.mode[id]);
+      node.setAttribute("aria-pressed", state.mode === id ? "true" : "false");
       node.addEventListener("click", function () {
-        state.mode = mode;
-        renderModes();
-        renderFormText();
+        state.mode = id;
+        renderChrome();
       });
       root.appendChild(node);
     });
   }
 
-  function renderFilters() {
-    var root = document.getElementById("filters");
+  function renderPresets() {
+    var root = document.getElementById("presets");
+    var c = t();
     root.textContent = "";
-    FILTERS.forEach(function (name) {
-      var node = button("filter", t().tags[name], { "aria-pressed": state.filters[name] ? "true" : "false" });
+    root.hidden = state.mode !== "pattern";
+    if (state.mode !== "pattern") return;
+    VipGen.PRESET_IDS.forEach(function (id) {
+      var node = button("preset" + (state.presets[id] ? " on" : ""), c.preset[id]);
+      node.setAttribute("aria-pressed", state.presets[id] ? "true" : "false");
       node.addEventListener("click", function () {
-        state.filters[name] = !state.filters[name];
-        renderFilters();
-        if (state.rows) paint(state.rows, false);
+        state.presets[id] = !state.presets[id];
+        renderPresets();
       });
       root.appendChild(node);
     });
   }
 
-  function renderChips() {
-    var root = document.getElementById("chips");
+  function renderQuick() {
+    var root = document.getElementById("quick");
     root.textContent = "";
-    CHIPS.forEach(function (chip) {
+    root.hidden = state.mode === "pattern" || state.mode === "mask";
+    if (root.hidden) return;
+    ["786", "0000", "1234", "6789", "2024"].forEach(function (chip) {
       var node = button("chip", chip);
       node.addEventListener("click", function () {
         document.getElementById("q").value = chip;
-        state.mode = "contains";
-        renderModes();
-        renderFormText();
         search(false);
       });
       root.appendChild(node);
     });
   }
 
-  function renderFormText() {
-    document.getElementById("qLabel").textContent = t().q;
-    document.getElementById("qHint").textContent = t().hint[state.mode];
-    document.getElementById("birthLabel").textContent = t().birth;
-    document.getElementById("go").textContent = t().go;
-    document.getElementById("more").textContent = t().more;
-    var title = lang() === "en" ? "Find a VIP number" : "ভিআইপি নম্বর খুঁজুন";
-    document.title = title;
-  }
-
-  function renderNotes() {
-    var root = document.getElementById("notes");
+  function renderHistory() {
+    var root = document.getElementById("history");
+    var list = readList("vip-number-history");
     root.textContent = "";
-    ["robi", "cirkle", "gp"].forEach(function (id) {
-      if (!state.ops[id]) return;
-      var copy = t().notes[id];
-      var box = el("article", "note");
-      box.appendChild(el("h2", "", copy.t));
-      box.appendChild(el("p", "", copy.p));
-      var link = el("a", "buy", t().buy);
-      link.href = BUY[id];
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      link.style.setProperty("--tone", id === "robi" ? "var(--robi)" : id === "cirkle" ? "var(--cirkle)" : "var(--gp)");
-      box.appendChild(link);
-      if (id === "gp") box.appendChild(proxyBox());
-      root.appendChild(box);
+    if (!list.length) return;
+    root.appendChild(el("p", "kicker", t().hist));
+    var row = el("div", "quick");
+    list.forEach(function (item) {
+      var node = button("chip", historyLabel(item));
+      node.addEventListener("click", function () {
+        state.op = item.op || "all";
+        state.mode = item.mode || "ends";
+        state.presets = {};
+        (item.presets || []).forEach(function (id) { state.presets[id] = true; });
+        document.getElementById("q").value = item.mode === "mask" ? (item.mask || "") : (item.digits || "");
+        renderChrome();
+        search(false);
+      });
+      row.appendChild(node);
     });
+    root.appendChild(row);
   }
 
-  function proxyBox() {
-    var wrap = el("div");
-    var label = el("label", "", t().proxyLabel);
-    label.htmlFor = "proxy";
-    var input = document.createElement("input");
-    input.id = "proxy";
-    input.className = "proxy";
-    input.type = "url";
-    input.placeholder = "https://….workers.dev";
-    input.value = gpProxy();
-    var save = button("textbtn", t().proxySave);
-    save.addEventListener("click", function () {
-      var value = input.value.trim().replace(/\/$/, "");
-      if (value && !/^https:\/\/[a-z0-9.-]+$/i.test(value)) return;
-      try { localStorage.setItem("vip-gp-proxy", value); } catch (e) {}
-      if (state.ops.gp) search(false);
-    });
-    var details = document.createElement("details");
-    details.appendChild(el("summary", "", t().proxySteps));
-    details.appendChild(el("p", "", t().proxyHelp));
-    wrap.appendChild(label);
-    wrap.appendChild(input);
-    wrap.appendChild(save);
-    wrap.appendChild(details);
-    return wrap;
+  function readSpec() {
+    var c = t();
+    var raw = document.getElementById("q").value;
+    var digits = VipScore.digitsOnly(raw);
+    if (state.mode === "starts" && digits.charAt(0) === "1") digits = "0" + digits;
+    var presets = VipGen.PRESET_IDS.filter(function (id) { return state.presets[id]; });
+    var spec = {
+      op: state.op,
+      mode: state.mode,
+      digits: digits,
+      presets: presets,
+      prefixes: VipGen.prefixesFor(state.op),
+      mask: ""
+    };
+    if (state.mode === "mask") {
+      var parsed = VipScore.parseMask(raw);
+      if (!parsed.ok) return { error: c.maskBad };
+      spec.mask = parsed.mask;
+      spec.digits = "";
+      return { spec: spec };
+    }
+    if (state.mode === "pattern") {
+      if (!presets.length) return { error: c.needPreset };
+      if (digits && (digits.length < 2 || digits.length > 8)) return { error: c.digitRange };
+      return { spec: spec };
+    }
+    if (state.mode === "starts") {
+      if (digits.length < 3 || digits.length > 11 || digits.indexOf("01") !== 0) return { error: c.startsBad };
+      var ok = spec.prefixes.some(function (p) { return digits.indexOf(p) === 0 || p.indexOf(digits) === 0; });
+      if (!ok) return { error: c.opMismatch };
+      spec.digits = digits;
+      return { spec: spec };
+    }
+    if (!digits || digits.length > 11) return { error: c.digitRange };
+    if (state.mode === "contains" && digits.length > 8) return { error: c.digitRange };
+    if (state.mode === "ends" && digits.length > 11) return { error: c.digitRange };
+    spec.digits = digits;
+    return { spec: spec };
   }
 
-  function paint(rows, cached) {
-    var birth = document.getElementById("birth").value;
-    var scored = rows.map(function (row) {
-      var info = VipScore.analyze(row.national, birth);
-      return {
-        national: row.national,
-        operator: row.operator,
-        series: row.series,
-        price: row.price,
-        category: row.category,
-        zone: row.zone,
-        score: info.score,
-        tags: info.tags,
-        hi: info.hi
-      };
-    }).filter(function (row) {
-      return VipScore.passesFilters(row, state.filters);
-    });
-    scored.sort(function (a, b) {
-      return b.score - a.score || (a.national < b.national ? -1 : 1);
-    });
-    state.rows = rows;
-    var root = document.getElementById("results");
-    root.textContent = "";
-    scored.forEach(function (row) { root.appendChild(card(row)); });
+  function matches(national, spec) {
+    if (!VipGen.isNational(national)) return false;
+    if (spec.prefixes.indexOf(national.slice(0, 3)) < 0) return false;
+    if (spec.mode === "ends" && national.slice(-spec.digits.length) !== spec.digits) return false;
+    if (spec.mode === "starts" && national.indexOf(spec.digits) !== 0) return false;
+    if (spec.mode === "contains" && national.indexOf(spec.digits) < 0) return false;
+    if (spec.mode === "mask" && !VipScore.matchesMask(national, spec.mask)) return false;
+    if (spec.mode === "pattern") {
+      if (spec.digits && national.indexOf(spec.digits) < 0) return false;
+      var hit = spec.presets.some(function (id) { return VipScore.hasPreset(national, id); });
+      if (!hit) return false;
+    }
+    return true;
+  }
+
+  function paintStatus() {
     var status = document.getElementById("status");
-    var shown = root.querySelectorAll(".card").length;
-    status.textContent = shown ? t().count(shown) + (cached ? " · " + t().cached : "") : t().none;
-    document.getElementById("more").hidden = !rows.length;
+    var c = t();
+    if (state.error) {
+      status.textContent = state.error;
+      return;
+    }
+    var n = state.liveFirst.length + state.items.length;
+    if (!n) {
+      status.textContent = state.message || "";
+      return;
+    }
+    var liveN = 0;
+    state.liveFirst.concat(state.items).forEach(function (num) { if (state.live[num]) liveN += 1; });
+    var text = c.count(n);
+    if (liveN) text += " · " + c.liveCount(liveN);
+    if (state.liveError) text += " · " + c.liveFail;
+    status.textContent = text;
   }
 
-  function card(row) {
+  function groups(national, info) {
+    var line = el("p", "num");
+    var parts = [national.slice(0, 3), national.slice(3, 7), national.slice(7)];
+    var at = 0;
+    parts.forEach(function (part, index) {
+      if (index) line.appendChild(document.createTextNode(" "));
+      var i;
+      for (i = 0; i < part.length; i++) {
+        var on = info.hi && at >= info.hi.start && at < info.hi.end;
+        var bit = document.createElement(on ? "mark" : "span");
+        bit.textContent = part.charAt(i);
+        line.appendChild(bit);
+        at += 1;
+      }
+    });
+    return line;
+  }
+
+  function card(national) {
+    var c = t();
+    var op = VipGen.operatorOf(national);
+    var info = VipScore.analyze(national, "");
+    var tier = VipScore.tier(info.score);
     var node = el("article", "card");
-    node.setAttribute("data-op", row.operator);
-    node.setAttribute("data-national", row.national);
-    node.appendChild(renderNumber(row.national, row.hi, (row.series || "").length || 5));
-    var who = el("div");
-    var name = row.operator === "bl" ? "banglalink" : row.operator === "gp" ? "GP" : row.operator;
-    who.appendChild(el("span", "who", name + " " + row.national.slice(0, 3)));
-    if (row.category) {
-      who.appendChild(document.createTextNode(" · " + (t().cat[row.category] || row.category)));
-    }
-    if (row.price) who.appendChild(document.createTextNode(" · " + t().price(row.price)));
-    if (row.zone) who.appendChild(document.createTextNode(" · " + row.zone));
-    who.appendChild(document.createTextNode(" · " + t().score + " " + row.score));
-    node.appendChild(who);
-    if (row.tags.length) {
-      var tags = el("div", "tags");
-      row.tags.forEach(function (tag) { tags.appendChild(el("span", "tag", t().tags[tag] || tag)); });
-      node.appendChild(tags);
-    }
+    node.setAttribute("data-op", op);
+    node.setAttribute("data-n", national);
+    node.appendChild(groups(national, info));
+    var meta = el("div", "meta");
+    meta.appendChild(el("span", "badge op-" + op, c.op[op] + " " + national.slice(0, 3)));
+    meta.appendChild(el("span", "tier tier-" + tier, c.tier[tier] + " · " + info.score));
+    node.appendChild(meta);
+    var avail = el("p", state.live[national] ? "avail live" : "avail suggest", state.live[national] ? c.live : c.suggest);
+    node.appendChild(avail);
     var actions = el("div", "actions");
-    var copyBtn = button("textbtn", t().copy);
-    copyBtn.addEventListener("click", function () { copyNumber(row.national, copyBtn); });
-    var share = button("textbtn", t().share);
-    share.addEventListener("click", function () { shareNumber(row.national); });
-    var fav = button("textbtn", isFav(row.national) ? t().favOn : t().fav);
+    var copyBtn = button("text", c.copy);
+    copyBtn.addEventListener("click", function () { copyNumber(national, copyBtn); });
+    var fav = button("text", isFav(national) ? c.favOn : c.fav);
+    fav.setAttribute("aria-pressed", isFav(national) ? "true" : "false");
     fav.addEventListener("click", function () {
-      toggleFav(row);
-      fav.textContent = isFav(row.national) ? t().favOn : t().fav;
+      toggleFav(national);
+      fav.textContent = isFav(national) ? c.favOn : c.fav;
+      fav.setAttribute("aria-pressed", isFav(national) ? "true" : "false");
       renderFavs();
     });
-    var buy = el("a", "buy", t().buy);
-    buy.href = BUY[row.operator] || BUY.bl;
+    var buy = el("a", "buy", c.buy);
+    buy.href = BUY[op] || BUY.bl;
     buy.target = "_blank";
     buy.rel = "noopener noreferrer";
     actions.appendChild(copyBtn);
-    actions.appendChild(share);
     actions.appendChild(fav);
     actions.appendChild(buy);
     node.appendChild(actions);
     return node;
   }
 
+  function repaint() {
+    state.liveFirst.sort(function (a, b) {
+      return VipScore.analyze(b, "").score - VipScore.analyze(a, "").score || (a < b ? -1 : 1);
+    });
+    var root = document.getElementById("list");
+    root.textContent = "";
+    var frag = document.createDocumentFragment();
+    state.liveFirst.concat(state.items).forEach(function (national) { frag.appendChild(card(national)); });
+    root.appendChild(frag);
+    document.getElementById("more").hidden = !(state.cursor && (!state.cursor.done() || state.liveMore));
+    paintStatus();
+    renderFavs();
+  }
+
   function copyNumber(national, btn) {
-    var text = national;
     var done = function () {
       var old = btn.textContent;
       btn.textContent = t().copied;
-      setTimeout(function () { btn.textContent = old; }, 1200);
+      setTimeout(function () { btn.textContent = old; }, 1100);
     };
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+      navigator.clipboard.writeText(national).then(done, function () { fallbackCopy(national); done(); });
     } else {
-      fallbackCopy(text);
+      fallbackCopy(national);
       done();
     }
   }
@@ -622,237 +470,249 @@
     try { document.execCommand("copy"); } catch (e) {}
     area.remove();
   }
-  function shareNumber(national) {
-    var data = { title: document.title, text: t().shareText(national), url: location.href.split("#")[0] };
-    if (navigator.share) navigator.share(data).catch(function () { copyNumber(national, document.createElement("button")); });
-    else copyNumber(national + " " + data.url, document.getElementById("go"));
-  }
-  function toggleFav(row) {
-    var list = readFavs().filter(function (item) { return item.national !== row.national; });
-    if (!isFav(row.national)) {
-      list.unshift({ national: row.national, operator: row.operator, series: row.series || "", price: row.price || 0, category: row.category || "" });
-    }
-    writeFavs(list);
-  }
 
   function renderFavs() {
     var root = document.getElementById("favList");
+    var list = readList("vip-number-favs").filter(function (item) { return item && VipGen.isNational(item.national); });
     root.textContent = "";
-    var list = readFavs();
     if (!list.length) {
       root.appendChild(el("p", "empty", t().emptyFav));
       return;
     }
-    list.forEach(function (row) {
-      var info = VipScore.analyze(row.national, document.getElementById("birth").value);
-      root.appendChild(card({
-        national: row.national,
-        operator: row.operator,
-        series: row.series,
-        price: row.price,
-        category: row.category,
-        score: info.score,
-        tags: info.tags,
-        hi: info.hi
-      }));
-    });
-  }
-
-  function validate() {
-    var raw = document.getElementById("q").value;
-    var mode = state.mode;
-    if (mode === "pattern") {
-      if (!VipScore.bnDigits(raw).replace(/[\s-]/g, "")) return { ok: true, digits: "", parsed: null, browse: true };
-      var parsed = VipScore.parsePattern(raw);
-      if (!parsed.ok) return { ok: false, message: parsed.reason === "length" ? t().patternLen : t().patternLen };
-      return { ok: true, digits: "", parsed: parsed };
-    }
-    var digits = VipScore.digitsOnly(raw);
-    if (!digits) return { ok: true, digits: "", parsed: null, browse: true };
-    if (mode === "starts") {
-      if (digits.indexOf("1") === 0) digits = "0" + digits;
-      if (digits.indexOf("019") !== 0 && digits.indexOf("014") !== 0) return { ok: false, message: t().startsHint };
-      if (digits.length < 3 || digits.length > 8) return { ok: false, message: t().startsHint };
-      return { ok: true, digits: digits, parsed: null };
-    }
-    if (digits.length < 2 || digits.length > 6) return { ok: false, message: t().digits };
-    return { ok: true, digits: digits, parsed: null };
+    list.forEach(function (item) { root.appendChild(card(item.national)); });
   }
 
   function search(more) {
-    var check = validate();
     var status = document.getElementById("status");
-    if (!check.ok) {
-      status.textContent = check.message;
-      return;
-    }
-    var foreign = check.parsed && check.parsed.op && { "018": "robi", "016": "cirkle", "017": "gp", "013": "gp" }[check.parsed.op];
-    if (foreign) {
-      state.ops[foreign] = true;
-      renderOps();
-      renderNotes();
-      if (!state.ops.bl) {
-        status.textContent = t().notes[foreign].t;
+    if (!more) {
+      var read = readSpec();
+      if (read.error) {
+        state.error = read.error;
+        state.message = "";
+        paintStatus();
         return;
       }
-    }
-    if (!state.ops.bl && !(state.ops.gp && gpProxy())) {
-      status.textContent = t().needBl;
-      renderNotes();
-      return;
-    }
-    if (state.ops.bl && !state.p019 && !state.p014) {
-      status.textContent = t().needPrefix;
-      return;
-    }
-    var key = JSON.stringify([state.mode, check.digits, check.parsed, state.p019, state.p014, state.ops.bl, state.ops.gp, gpProxy()]);
-    if (!more || key !== state.lastKey) state.page = 1;
-    else state.page += 1;
-    if (state.page > 3) {
-      state.page = 3;
-      return;
-    }
-    state.lastKey = key;
-    var id = ++runId;
-    state.busy = true;
-    document.getElementById("go").disabled = true;
-    status.textContent = t().searching;
-    if (!more) document.getElementById("results").textContent = "";
-
-    var tasks = [];
-    if (state.ops.bl) tasks.push(searchBl(check, state.page));
-    if (state.ops.gp && gpProxy() && state.page === 1) tasks.push(searchGp());
-    Promise.all(tasks).then(function (parts) {
-      if (id !== runId) return;
-      var rows = more ? (state.raw || []).slice() : [];
-      var cached = false;
-      var failed = false;
-      var seen = {};
-      var filterMode = check.browse ? "contains" : (check.parsed ? "pattern" : state.mode);
-      rows.forEach(function (row) { seen[row.national] = true; });
-      parts.forEach(function (part) {
-        cached = cached || part.cached;
-        failed = failed || part.failed;
-        (part.rows || []).forEach(function (row) {
-          if (row.operator === "gp" && !keep(row.national, filterMode, check.browse ? "" : check.digits, check.parsed)) return;
-          if (seen[row.national]) return;
-          seen[row.national] = true;
-          rows.push(row);
-        });
-      });
-      state.raw = rows;
-      if (!rows.length && failed) status.textContent = t().fail;
-      else paint(rows, cached);
-    }).catch(function () {
-      if (id === runId) status.textContent = t().fail;
-    }).then(function () {
-      if (id === runId) {
-        state.busy = false;
+      state.error = "";
+      state.message = "";
+      state.spec = read.spec;
+      state.run += 1;
+      state.cursor = VipGen.createCursor(read.spec);
+      state.items = [];
+      state.liveFirst = [];
+      state.seen = {};
+      state.live = {};
+      state.liveError = false;
+      state.livePage = 1;
+      state.liveMore = false;
+      state.liveBusy = false;
+      document.getElementById("list").textContent = "";
+      status.textContent = t().working;
+      document.getElementById("go").disabled = true;
+      remember(read.spec);
+      renderHistory();
+      var run = state.run;
+      setTimeout(function () {
+        if (run !== state.run) return;
+        try { pull(PAGE); } catch (e) { state.message = t().none; }
         document.getElementById("go").disabled = false;
-      }
+        if (!state.items.length && !state.liveFirst.length && !state.message) state.message = t().none;
+        repaint();
+        askLive(read.spec, 1, run);
+      }, 20);
+      return;
+    }
+    if (!state.cursor) return;
+    pull(PAGE);
+    repaint();
+    if (state.liveMore && state.spec) askLive(state.spec, state.livePage + 1, state.run);
+  }
+
+  function pull(k) {
+    if (!state.cursor) return;
+    var batch = state.cursor.next(k);
+    batch.sort(function (a, b) {
+      return VipScore.analyze(b, "").score - VipScore.analyze(a, "").score || (a < b ? -1 : 1);
     });
-    renderNotes();
+    batch.forEach(function (national) {
+      if (state.seen[national]) return;
+      state.seen[national] = 1;
+      state.items.push(national);
+    });
   }
 
-  function searchBl(check, page) {
-    return Promise.all([loadSeries(false), loadPrices(false)]).then(function (loaded) {
-      var series = selectedSeries(loaded[0]);
-      var prices = loaded[1];
-      var parsed = check.parsed;
-      if (parsed && parsed.op && parsed.op !== "019" && parsed.op !== "014") {
-        return { rows: [], cached: false };
-      }
-      var mode = check.browse ? "contains" : (parsed ? "pattern" : state.mode);
-      var plan = jobsFor(series, mode, check.browse ? "" : check.digits, parsed);
-      if (!plan.length) return { rows: [], cached: false };
-      var cached = false;
-      var anyFailed = false;
-      return Promise.all(plan.map(function (job) {
-        return cachedGet(inventoryUrl(job.prefix, job.postfix, page), 3 * 60 * 1000, false).then(function (pack) {
-          cached = cached || pack.cached;
-          var list = ((((pack.data || {}).payload || {}).data || {}).msisdns || []);
-          return list.map(function (item) {
-            var national = nationalOf(item.msisdn);
-            if (!keep(national, mode, check.browse ? "" : check.digits, parsed)) return null;
-            var category = categoryOf(item);
-            return {
-              national: national,
-              operator: "bl",
-              series: job.series,
-              category: category,
-              price: prices[category] || prices.Normal || 0
-            };
-          }).filter(Boolean);
-        }).catch(function () {
-          anyFailed = true;
-          return [];
-        });
-      })).then(function (groups) {
-        var rows = [];
-        var seen = {};
-        groups.forEach(function (group) {
-          group.forEach(function (row) {
-            if (seen[row.national]) return;
-            seen[row.national] = true;
-            rows.push(row);
-          });
-        });
-        return { rows: rows, cached: cached, failed: anyFailed && !rows.length };
+  function nationalOf(msisdn) {
+    var d = String(msisdn || "");
+    if (d.indexOf("880") === 0) d = "0" + d.slice(3);
+    return /^01\d{9}$/.test(d) ? d : "";
+  }
+
+  function longestRun(mask) {
+    var best = "";
+    var cur = "";
+    var i;
+    for (i = 0; i < mask.length; i++) {
+      var ch = mask.charAt(i);
+      if (ch >= "0" && ch <= "9") {
+        cur += ch;
+        if (cur.length > best.length) best = cur;
+      } else cur = "";
+    }
+    if (best.length < 2) return "";
+    return best.slice(0, 6);
+  }
+
+  function probesFor(spec) {
+    var out = [];
+    if (spec.mode === "starts") return out;
+    if (spec.digits && spec.digits.length >= 2 && spec.digits.length <= 6) out.push(spec.digits);
+    if (spec.mode === "mask") {
+      var run = longestRun(spec.mask);
+      if (run) out.push(run);
+    }
+    if (spec.mode === "pattern" && (!spec.digits || spec.digits.length < 2)) {
+      var set = spec.presets || [];
+      if (set.indexOf("lucky") >= 0) out.push("786");
+      else if (set.indexOf("repeat") >= 0) out.push("0000");
+      else if (set.indexOf("sequence") >= 0) out.push("1234");
+      else if (set.indexOf("year") >= 0) out.push("2000");
+    }
+    var seen = {};
+    return out.filter(function (p) {
+      if (seen[p] || p.length < 2 || p.length > 6) return false;
+      seen[p] = 1;
+      return true;
+    }).slice(0, 2);
+  }
+
+  function wantsLive(spec) {
+    return spec.prefixes.indexOf("014") >= 0 || spec.prefixes.indexOf("019") >= 0;
+  }
+
+  function loadSeries() {
+    if (state.series) return Promise.resolve(state.series);
+    return fetch(BL + "/msisdn-series").then(function (res) {
+      if (!res.ok) throw new Error("http");
+      return res.json();
+    }).then(function (data) {
+      var list = ((((data || {}).payload || {}).data || {}).series || []).map(function (item) {
+        return String(item.series || "");
+      }).filter(function (series) { return /^01\d{3,5}$/.test(series); });
+      state.series = list.length ? list : SERIES_FALLBACK.slice();
+      return state.series;
+    }).catch(function () {
+      state.series = SERIES_FALLBACK.slice();
+      return state.series;
+    });
+  }
+
+  function invUrl(prefix, postfix, page) {
+    return BL + "/msisdn-inventory?msisdn_prefix=" + encodeURIComponent(prefix) +
+      "&msisdn_postfix=" + encodeURIComponent(postfix || "") +
+      "&show_special_number=false&page_number=" + page + "&page_size=20";
+  }
+
+  function jobsFor(spec, series, page) {
+    var bl = series.filter(function (s) {
+      return spec.prefixes.some(function (p) { return s.indexOf(p) === 0; });
+    });
+    if (spec.mode === "starts" && (spec.digits.indexOf("019") === 0 || spec.digits.indexOf("014") === 0)) {
+      return bl.filter(function (s) {
+        return s.indexOf(spec.digits) === 0 || spec.digits.indexOf(s) === 0;
+      }).map(function (s) {
+        var prefix = spec.digits.length >= s.length ? spec.digits : s;
+        return { prefix: "88" + prefix, postfix: "" };
       });
-    }).catch(function () { return { rows: [], failed: true }; });
+    }
+    return probesFor(spec).reduce(function (jobs, probe) {
+      bl.forEach(function (s) { jobs.push({ prefix: "88" + s, postfix: probe }); });
+      return jobs;
+    }, []);
   }
 
-  function searchGp() {
-    var base = gpProxy();
-    var wants = [];
-    GP_PRODUCTS.forEach(function (item) { wants.push(item); });
-    return Promise.all(wants.map(function (item) {
-      return fetch(base + "/gp/numbers", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nid: item.nid, district: "Dhaka" })
-      }).then(function (res) {
+  function readRows(data) {
+    return ((((data || {}).payload || {}).data || {}).msisdns || []).map(function (item) {
+      return nationalOf(item.msisdn);
+    }).filter(Boolean);
+  }
+
+  function addLive(national, run) {
+    if (run !== state.run || !state.spec || !matches(national, state.spec)) return;
+    state.live[national] = 1;
+    if (state.seen[national]) return;
+    state.seen[national] = 1;
+    state.liveFirst.unshift(national);
+  }
+
+  function askLive(spec, page, run) {
+    if (!wantsLive(spec) || state.liveBusy) return;
+    state.liveBusy = true;
+    function finish() {
+      if (run === state.run) state.liveBusy = false;
+    }
+    loadSeries().then(function (series) {
+      if (run !== state.run) { finish(); return; }
+      var jobs = jobsFor(spec, series, page);
+      if (!jobs.length) {
+        if (page === 1) exactTop(spec, run, finish);
+        else finish();
+        return;
+      }
+      var full = false;
+      var failed = 0;
+      var pending = jobs.length;
+      jobs.forEach(function (job) {
+        fetch(invUrl(job.prefix, job.postfix, page)).then(function (res) {
+          if (!res.ok) throw new Error("http");
+          return res.json();
+        }).then(function (data) {
+          if (run !== state.run) return;
+          var rows = readRows(data);
+          if (rows.length >= 20) full = true;
+          rows.forEach(function (national) { addLive(national, run); });
+        }).catch(function () {
+          failed += 1;
+        }).then(function () {
+          pending -= 1;
+          if (pending) return;
+          if (run !== state.run) { finish(); return; }
+          state.liveError = failed === jobs.length;
+          state.livePage = page;
+          state.liveMore = full && page < 10;
+          if (page === 1 && !Object.keys(state.live).length) exactTop(spec, run, finish);
+          else { repaint(); finish(); }
+        });
+      });
+    }).catch(function () { finish(); });
+  }
+
+  function exactTop(spec, run, done) {
+    var sample = state.items.filter(function (national) { return VipGen.operatorOf(national) === "bl"; }).slice(0, 3);
+    if (!sample.length) { if (done) done(); return; }
+    var left = sample.length;
+    var anyFail = false;
+    sample.forEach(function (national) {
+      fetch(invUrl("88" + national, "", 1)).then(function (res) {
         if (!res.ok) throw new Error("http");
         return res.json();
       }).then(function (data) {
-        return (data.numbers || []).map(function (row) {
-          var national = nationalOf(row.number) || (/^01\d{9}$/.test(row.number) ? row.number : "");
-          if (!national || national.slice(0, 3) !== item.prefix) return null;
-          return { national: national, operator: "gp", series: national.slice(0, 5), zone: row.zone || "Dhaka", price: 0, category: "" };
-        }).filter(Boolean);
-      }).catch(function () { return []; });
-    })).then(function (groups) {
-      var rows = [];
-      var seen = {};
-      groups.forEach(function (group) {
-        group.forEach(function (row) {
-          if (seen[row.national]) return;
-          seen[row.national] = true;
-          rows.push(row);
-        });
+        if (run !== state.run) return;
+        if (readRows(data).indexOf(national) >= 0) addLive(national, run);
+      }).catch(function () {
+        anyFail = true;
+      }).then(function () {
+        left -= 1;
+        if (left) return;
+        if (run === state.run) {
+          if (anyFail && !Object.keys(state.live).length) state.liveError = true;
+          repaint();
+        }
+        if (done) done();
       });
-      return { rows: rows, cached: false, failed: !rows.length };
     });
   }
 
-  function setLang(next) {
-    document.documentElement.setAttribute("data-lang", next);
-    document.documentElement.lang = next;
-    try { localStorage.setItem("vip-lang", next); } catch (e) {}
-    try { localStorage.setItem("robin-lang", next); } catch (e) {}
-    renderAll();
-  }
-
-  function renderAll() {
-    renderOps();
-    renderPrefixes();
-    renderModes();
-    renderFilters();
-    renderChips();
-    renderFormText();
-    renderNotes();
+  function renderFavsOnLoad() {
     renderFavs();
-    if (state.rows) paint(state.rows, false);
   }
 
   document.getElementById("langBtn").addEventListener("click", function () {
@@ -864,6 +724,25 @@
   });
   document.getElementById("more").addEventListener("click", function () { search(true); });
 
-  renderAll();
-  search(false);
+  var deferredInstall = null;
+  window.addEventListener("beforeinstallprompt", function (event) {
+    event.preventDefault();
+    deferredInstall = event;
+    document.getElementById("install").hidden = false;
+  });
+  document.getElementById("install").addEventListener("click", function () {
+    if (!deferredInstall) return;
+    deferredInstall.prompt();
+    deferredInstall = null;
+    document.getElementById("install").hidden = true;
+  });
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () {});
+    });
+  }
+
+  renderChrome();
+  renderFavsOnLoad();
 })();
